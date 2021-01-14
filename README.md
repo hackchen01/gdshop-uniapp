@@ -64,26 +64,26 @@
 
 ## 预览图
 
-![01](http://woyinshua-order-img.gida.cn//project_demo/gdshop/01.png)
-![02](http://woyinshua-order-img.gida.cn//project_demo/gdshop/02.png)
-![03](http://woyinshua-order-img.gida.cn//project_demo/gdshop/03.png)
-![04](http://woyinshua-order-img.gida.cn//project_demo/gdshop/04.png)
-![05](http://woyinshua-order-img.gida.cn//project_demo/gdshop/05.png)
-![06](http://woyinshua-order-img.gida.cn//project_demo/gdshop/06.png)
-![07](http://woyinshua-order-img.gida.cn//project_demo/gdshop/07.png)
-![08](http://woyinshua-order-img.gida.cn//project_demo/gdshop/08.png)
-![09](http://woyinshua-order-img.gida.cn//project_demo/gdshop/09.png)
-![10](http://woyinshua-order-img.gida.cn//project_demo/gdshop/10.png)
-![11](http://woyinshua-order-img.gida.cn//project_demo/gdshop/11.png)
-![12](http://woyinshua-order-img.gida.cn//project_demo/gdshop/12.png)
-![13](http://woyinshua-order-img.gida.cn//project_demo/gdshop/13.png)
-![14](http://woyinshua-order-img.gida.cn//project_demo/gdshop/14.png)
-![15](http://woyinshua-order-img.gida.cn//project_demo/gdshop/15.png)
-![16](http://woyinshua-order-img.gida.cn//project_demo/gdshop/16.png)
+![01](https://img.kuke365.com/project_demo/gdshop/01.png)
+![02](https://img.kuke365.com/project_demo/gdshop/02.png)
+![03](https://img.kuke365.com/project_demo/gdshop/03.png)
+![04](https://img.kuke365.com/project_demo/gdshop/04.png)
+![05](https://img.kuke365.com/project_demo/gdshop/05.png)
+![06](https://img.kuke365.com/project_demo/gdshop/06.png)
+![07](https://img.kuke365.com/project_demo/gdshop/07.png)
+![08](https://img.kuke365.com/project_demo/gdshop/08.png)
+![09](https://img.kuke365.com/project_demo/gdshop/09.png)
+![10](https://img.kuke365.com/project_demo/gdshop/10.png)
+![11](https://img.kuke365.com/project_demo/gdshop/11.png)
+![12](https://img.kuke365.com/project_demo/gdshop/12.png)
+![13](https://img.kuke365.com/project_demo/gdshop/13.png)
+![14](https://img.kuke365.com/project_demo/gdshop/14.png)
+![15](https://img.kuke365.com/project_demo/gdshop/15.png)
+![16](https://img.kuke365.com/project_demo/gdshop/16.png)
 
 ## 交流QQ群
 
-![QQ群:822176616](http://woyinshua-order-img.gida.cn//project_demo/gdshop/gdshop_qun.png)
+![QQ群:822176616](https://img.kuke365.com/project_demo/gdshop/gdshop_qun.png)
 
 
 
