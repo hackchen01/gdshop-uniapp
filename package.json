@@ -1,0 +1,26 @@
+{
+  "name": "gdshop-uniapp",
+  "version": "1.0.0",
+  "description": "gdshop商城",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/hackchen/gdbase6-shop-uniapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@holyhigh/func.js": "^0.1.2",
+    "uni-read-pages": "^1.0.5",
+    "uni-simple-router": "^1.5.5",
+    "vuex": "^3.5.1",
+    "vuex-persistedstate": "^4.0.0-beta.1"
+  },
+  "devDependencies": {
+    "@types/uni-app": "^1.4.3"
+  }
+}

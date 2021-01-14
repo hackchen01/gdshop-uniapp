@@ -1,0 +1,77 @@
+page {
+	background: #fff;
+}
+
+.send-msg {
+	border-radius: 30px;
+	color: black;
+	background: white;
+	height: 30px;
+	font-size: 14px;
+	line-height: 30px;
+}
+
+.container {
+	top: 0;
+	padding-top: 32upx;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background: #fff;
+}
+
+.wrapper {
+	position: relative;
+	z-index: 90;
+	background: #fff;
+	padding-bottom: 20px;
+}
+
+.confirm-btn {
+	width: 300px;
+	height: 42px;
+	line-height: 42px;
+	border-radius: 30px;
+	margin-top: 40rpx;
+	background-color: #F00;
+	color: #fff;
+	font-size: 32rpx;
+
+	&:after {
+		border-radius: 60px;
+	}
+	
+	&.disable{
+		background-color: #CCC;
+	}
+}
+.form{
+	padding: 0 60rpx;
+}
+.quick-login{
+	text-align: center;
+	margin-top: 30rpx;
+	.title{
+		color: #AAA;
+	}
+	.icons{
+		padding-top: 20rpx;
+		
+		.ql-icon{
+			margin-left: 20rpx;
+			&:first{
+				margin-left: 0;
+			}
+		}
+	}
+}
+.agree-box{
+	display: flex;
+	justify-content: center;
+	justify-items: center;
+	margin-top: 60rpx;
+	.text{
+		line-height: 60rpx;
+	}
+}

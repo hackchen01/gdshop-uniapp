@@ -1,0 +1,371 @@
+{
+	"easycom": {
+		"^u-(.*)": "@/plugins/uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"aliasPath":"/",
+			"name":"index/index",
+			"meta":{
+				"title": "gdshop商城"
+			},
+			"style": {
+				"navigationBarTitleText": "gdshop商城"
+			}
+		},
+		{
+			"path": "pages/index/login",
+			"name":"index/login",
+			"meta":{
+				"title": "登陆"
+			},
+			"style": {
+				"navigationBarTitleText": "登陆"
+			}
+		},
+		{
+			"path": "pages/index/register",
+			"name":"index/register",
+			"meta":{
+				"title": "注册"
+			},
+			"style": {
+				"navigationBarTitleText": "注册"
+			}
+		},
+		{
+			"path": "pages/index/forget",
+			"name":"index/forget",
+			"meta":{
+				"title": "找回密码"
+			},
+			"style": {
+				"navigationBarTitleText": "找回密码"
+			}
+		},
+		{
+			"path": "pages/article/index",
+			"name":"article/index",
+			"meta":{
+				"title": "文章列表"
+			},
+			"style": {
+				"navigationBarTitleText": "文章列表"
+			}
+		},
+		{
+			"path": "pages/article/view",
+			"name":"article/view",
+			"meta":{
+				"title": "文章详情"
+			},
+			"style": {
+				"navigationBarTitleText": "文章详情"
+			}
+		},
+		{
+			"path": "pages/classify/index",
+			"name":"classify/index",
+			"meta":{
+				"title": "分类"
+			},
+			"style": {
+				"navigationBarTitleText": "分类"
+			}
+		},
+		{
+			"path": "pages/cart/index",
+			"name":"cart/index",
+			"meta":{
+				"title": "购物车"
+			},
+			"style": {
+				"navigationBarTitleText": "购物车"
+			}
+		},
+		{
+			"path": "pages/member/index",
+			"name":"member/index",
+			"meta":{
+				"title": "我的"
+			},
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/index/msg",
+			"name":"index/msg",
+			"meta":{
+				"title": "提示"
+			},
+			"style": {
+				"navigationBarTitleText": "提示"
+			}
+		},
+		{
+			"path": "pages/member/address_list",
+			"name":"member/address_list",
+			"meta":{
+				"title": "我的地址"
+			},
+			"style": {
+				"navigationBarTitleText": "我的地址"
+			}
+		},
+		{
+			"path": "pages/member/address_edit",
+			"name":"member/address_edit",
+			"meta":{
+				"title": "地址编辑"
+			},
+			"style": {
+				"navigationBarTitleText": "地址编辑"
+			}
+		},
+		{
+			"path": "pages/member/order_list",
+			"name":"member/order_list",
+			"meta":{
+				"title": "订单列表"
+			},
+			"style": {
+				"navigationBarTitleText": "订单列表"
+			}
+		},
+		{
+			"path": "pages/member/order_details",
+			"name":"member/order_details",
+			"meta":{
+				"title": "订单详情"
+			},
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
+			"path": "pages/member/order_service",
+			"name":"member/order_service",
+			"meta":{
+				"title": "售后/退款"
+			},
+			"style": {
+				"navigationBarTitleText": "售后/退款"
+			}
+		},
+		{
+			"path": "pages/member/my_coupon",
+			"name":"member/my_coupon",
+			"meta":{
+				"title": "我的优惠券"
+			},
+			"style": {
+				"navigationBarTitleText": "我的优惠券"
+			}
+		},
+		{
+			"path": "pages/member/my_favorite",
+			"name":"member/my_favorite",
+			"meta":{
+				"title": "我的收藏"
+			},
+			"style": {
+				"navigationBarTitleText": "我的收藏"
+			}
+		},
+		{
+			"path": "pages/member/setting",
+			"name":"member/setting",
+			"meta":{
+				"title": "设置"
+			},
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/member/personal",
+			"name":"member/personal",
+			"meta":{
+				"title": "编辑个人资料"
+			},
+			"style": {
+				"navigationBarTitleText": "编辑个人资料"
+			}
+		},
+		{
+			"path": "pages/member/personal_ext",
+			"name":"member/personal_ext",
+			"meta":{
+				"title": "编辑个人资料"
+			},
+			"style": {
+				"navigationBarTitleText": "编辑个人资料"
+			}
+		},
+		{
+			"path": "pages/goods/list",
+			"name":"goods/list",
+			"meta":{
+				"title": "商品列表"
+			},
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
+				"backgroundColorTop": "#F7F7F7",
+				"backgroundColorBottom": "#F7F7F7",
+				"navigationBarTitleText": "商品列表",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false,
+					"bounce": "vertical"
+				}
+			}
+		},
+		{
+			"path": "pages/goods/details",
+			"name":"goods/details",
+			"meta":{
+				"title": "商品详情"
+			},
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
+				"backgroundColorTop": "#F7F7F7",
+				"backgroundColorBottom": "#F7F7F7",
+				"navigationBarTitleText": "商品详情",
+				"navigationStyle": "custom",
+				"app-plus": {
+					"titleNView": false,
+					"bounce": "vertical"
+				}
+			}
+		},
+		{
+			"path": "pages/goods/search",
+			"name":"goods/search",
+			"meta":{
+				"title": "搜索"
+			},
+			"style": {
+				"navigationBarTitleText": "搜索"
+			}
+		},
+		{
+			"path": "pages/goods/comment",
+			"name":"goods/comment",
+			"meta":{
+				"title": "商品评价"
+			},
+			"style": {
+				"navigationBarTitleText": "商品评价"
+			}
+		},
+		{
+			"path": "pages/order/use_coupon",
+			"name":"order/use_coupon",
+			"meta":{
+				"title": "使用优惠券"
+			},
+			"style": {
+				"navigationBarTitleText": "使用优惠券"
+			}
+		},
+		{
+			"path": "pages/order/use_invoice",
+			"name":"order/use_invoice",
+			"meta":{
+				"title": "选择发票"
+			},
+			"style": {
+				"navigationBarTitleText": "选择发票"
+			}
+		},
+		{
+			"path": "pages/order/create",
+			"name":"order/create",
+			"meta":{
+				"title": "提交订单"
+			},
+			"style": {
+				"navigationBarTitleText": "提交订单"
+			}
+		},
+		{
+			"path": "pages/order/select_address",
+			"name":"order/select_address",
+			"meta":{
+				"title": "选择地址"
+			},
+			"style": {
+				"navigationBarTitleText": "选择地址"
+			}
+		},
+		{
+			"path": "pages/order/pay",
+			"name":"order/pay",
+			"meta":{
+				"title": "订单支付"
+			},
+			"style": {
+				"navigationBarTitleText": "订单支付"
+			}
+		},
+		{
+			"path": "pages/coupon/index",
+			"name":"coupon/index",
+			"meta":{
+				"title": "优惠券中心"
+			},
+			"style": {
+				"navigationBarTitleText": "优惠券中心"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "gdshop商城",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+	    "color": "#515151",
+	    "selectedColor": "#d81e06",
+	    "borderStyle": "black",
+	    "backgroundColor": "#ffffff",
+	    "list": [{
+	        "pagePath": "pages/index/index",
+	        "iconPath": "static/images/tabber/home.png",
+	        "selectedIconPath": "static/images/tabber/home-a.png",
+	        "text": "首页"
+	    },
+		{
+		    "pagePath": "pages/classify/index",
+		    "iconPath": "static/images/tabber/fenlei.png",
+		    "selectedIconPath": "static/images/tabber/fenlei-a.png",
+		    "text": "分类"
+		},
+		{
+		    "pagePath": "pages/cart/index",
+		    "iconPath": "static/images/tabber/cart.png",
+		    "selectedIconPath": "static/images/tabber/cart-a.png",
+		    "text": "购物车"
+		},{
+	        "pagePath": "pages/member/index",
+	        "iconPath": "static/images/tabber/user.png",
+	        "selectedIconPath": "static/images/tabber/user-a.png",
+	        "text": "我的"
+	    }]
+	},
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "首页", //模式名称
+				"path": "pages/index/index", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
+}
