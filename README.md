@@ -62,6 +62,29 @@
 1. 在项目根目录运行 npm install ，安装node依赖包
 2. 使用 HBuilderX 打开即可运行
 
+## 预览图
+
+![01](http://woyinshua-order-img.gida.cn//project_demo/gdshop/01.png)
+![02](http://woyinshua-order-img.gida.cn//project_demo/gdshop/02.png)
+![03](http://woyinshua-order-img.gida.cn//project_demo/gdshop/03.png)
+![04](http://woyinshua-order-img.gida.cn//project_demo/gdshop/04.png)
+![05](http://woyinshua-order-img.gida.cn//project_demo/gdshop/05.png)
+![06](http://woyinshua-order-img.gida.cn//project_demo/gdshop/06.png)
+![07](http://woyinshua-order-img.gida.cn//project_demo/gdshop/07.png)
+![08](http://woyinshua-order-img.gida.cn//project_demo/gdshop/08.png)
+![09](http://woyinshua-order-img.gida.cn//project_demo/gdshop/09.png)
+![10](http://woyinshua-order-img.gida.cn//project_demo/gdshop/10.png)
+![11](http://woyinshua-order-img.gida.cn//project_demo/gdshop/11.png)
+![12](http://woyinshua-order-img.gida.cn//project_demo/gdshop/12.png)
+![13](http://woyinshua-order-img.gida.cn//project_demo/gdshop/13.png)
+![14](http://woyinshua-order-img.gida.cn//project_demo/gdshop/14.png)
+![15](http://woyinshua-order-img.gida.cn//project_demo/gdshop/15.png)
+![16](http://woyinshua-order-img.gida.cn//project_demo/gdshop/16.png)
+
+## 交流QQ群
+
+![QQ群](http://woyinshua-order-img.gida.cn//project_demo/gdshop/gdshop_qun.png)
+
 ## 感谢
 
 1. uniapp
