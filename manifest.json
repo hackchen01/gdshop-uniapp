@@ -1,7 +1,7 @@
 {
-    "name" : "gdbase6商城",
-    "appid" : "__UNI__DE5C136",
-    "description" : "gdbase6商城",
+    "name" : "gdshop商城",
+    "appid" : "",
+    "description" : "gdshop商城",
     "versionName" : "1.0.0",
     "versionCode" : "100",
     "transformPx" : false,
@@ -65,7 +65,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx4c014b338288d310",
+        "appid" : "",
         "setting" : {
             "urlCheck" : false
         },
