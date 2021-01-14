@@ -83,7 +83,9 @@
 
 ## 交流QQ群
 
-![QQ群](http://woyinshua-order-img.gida.cn//project_demo/gdshop/gdshop_qun.png)
+![QQ群:822176616](http://woyinshua-order-img.gida.cn//project_demo/gdshop/gdshop_qun.png)
+
+
 
 ## 感谢
 
