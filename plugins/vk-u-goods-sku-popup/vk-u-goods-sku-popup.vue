@@ -21,7 +21,7 @@
 								<text class="price">{{ selectShop.price | priceFilter }}</text>
 							</view>
 							<view class="inventory">{{ stockText }}：{{ selectShop[stockName] || 0 }}</view>
-							<view class="choose" v-show="goodsInfo[specListName] && goodsInfo[specListName][0].name !== defaultSingleSkuName">已选：{{ selectArr.join(' ') }}</view>
+							<view class="choose" v-show="goodsInfo[specListName] && goodsInfo[specListName][0].name !== defaultSingleSkuName">已选：{{ selectedText }}</view>
 						</view>
 					</view>
 					
@@ -565,7 +565,20 @@
 		},
 		// 计算属性
 		computed:{
-			
+			selectedText(){
+				let newTexts = this.selectArr.filter(item => {
+					if (item.length){
+						return item
+					}
+				})
+				console.log(newTexts)
+				if (newTexts.length > 0) {
+					return newTexts.join(';')
+				}
+				else{
+					return ''
+				}
+			}
 		},
 		watch : {
 			value:function(val) {
