@@ -263,7 +263,7 @@
 				</view>
 			</view>
 
-			<u-divider bgColor="f5f5f5" margin-bottom="30" margin-top="30">宝贝详情</u-divider>
+			<u-divider bgColor="f5f5f5" margin-bottom="30" margin-top="30" @click="getGoodsInfo(46)">宝贝详情</u-divider>
 
 			<view class="goods-content-box">
 				 <u-image :src="'https://www.thorui.cn/img/detail/' + (index + 1) + '.jpg'"
@@ -289,6 +289,11 @@
 			@close="closeSkuPopup"
 			@add-cart="addCart"
 			@buy-now="buyNow"
+			goodsIdName="id"
+			skuIdName="id"
+			skuListName="options"
+			specListName="specs"
+			goodsThumbName="cover_photo"
 		></vk-u-goods-sku-popup>
 
 		<!-- 底部栏 -->
@@ -418,6 +423,7 @@
 		},
 		data() {
 			return {
+				goodsId:46,
 				skuIsShow:false,
 				skuMode:1,
 				closeImage:'/static/images/btn_sku_popup_close.png',
@@ -505,6 +511,12 @@
 			closeSku(){
 				this.skuIsShow = false
 			},
+			getGoodsInfo(_goodsId){
+				this.$api.goods.details({id:_goodsId}).then(res => {
+					console.log(res)
+					goodsData1 = res
+				})
+			},
 			gotoNavigation(_type){
 				switch (_type){
 					case 'kefu':
@@ -574,14 +586,17 @@
 			 * 获取商品信息
 			 * 这里可以看到每次打开SKU都会去重新请求商品信息,为的是每次打开SKU组件可以实时看到剩余库存
 			 */
-			findGoodsInfo(){
+			findGoodsInfo(e){
 				return new Promise(function (resolve, reject) {
 					// 此处写接口请求，并将返回的数据进行处理成goodsData1的数据格式，
 					// 并执行resolve
-					let goodsInfo = goodsData1;			// 有sku的商品
+					// let goodsInfo = goodsData1;			// 有sku的商品
+					// console.log(goodsInfo)
 					//let goodsInfo = goodsData2;   // 无sku的商品
-					resolve(goodsInfo);
-
+					// resolve(goodsInfo);
+					that.$api.goods.details({id:that.goodsId}).then(res => {
+						resolve(res);
+					})
 				});
 			},
 			toast(msg){
