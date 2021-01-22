@@ -3,7 +3,7 @@ import Request from '@/plugins/luch-request/index.js'
 // 初始化
 const http = new Request()
 // 设置公共参数
-http.config.baseURL = 'http://www.baidu.com'
+http.config.baseURL = 'http://127.0.0.1:8181'
 
 // 请求前拦截
 http.interceptors.request.use((config) => { // 可使用async await 做异步操作
