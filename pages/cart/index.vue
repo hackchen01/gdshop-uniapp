@@ -206,8 +206,9 @@
 			},
 			swipeActionClick(index,btnIndex){
 				if(btnIndex == 1) {
+					const model = this.cartList[index]
 					this.cartList.splice(index, 1);
-					this.$u.toast(`删除了第${index}个cell`);
+					this.$api.cart.del({id:model.id})
 				} else {
 					this.cartList[index].show = false;
 					this.$u.toast(`收藏成功`);

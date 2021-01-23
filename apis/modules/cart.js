@@ -27,6 +27,13 @@ export default ( http ) => ({
 			data
 		})
 	},
+	del (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/cart/del',
+			params: query
+		})
+	},
 	test () {
 		return 'test'
 	}
