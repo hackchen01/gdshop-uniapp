@@ -1,6 +1,18 @@
 <template>
 	<view class="shopping-cart">
 		<view class="page-bg-gray"></view>
+		<block v-if="isLogin == false">
+			<view class="empty">
+				<u-empty text="请先登陆" mode="permission" iconSize="180" fontSize="36">
+					<view slot="bottom">
+						<button class="confirm-btn" @click="gotoLogin">
+							登录
+						</button>
+					</view>
+				</u-empty>
+			</view>
+		</block>
+		<block v-else>
 		<view class="empty" v-if="cartList.length < 1">
 			<u-empty text="购物车空空的" mode="car" iconSize="180" fontSize="36"></u-empty>
 		</view>
@@ -17,21 +29,21 @@
 				</view>
 				<view class="goods-box">
 					<view class="pictrue" @click="gotoGoodsDetails(1)">
-						<image class="img" src="//kaifa.crmeb.net/uploads/attach/2020/03/20200319/8e18311a1b2ca1b98a5782a252b7dd50.png" mode=""></image>
+						<image class="img" :src="item.goods_cover" mode=""></image>
 					</view>
 					<view class="info">
 						<view class="goods-name" @click="gotoGoodsDetails(1)">
-							小黄鸭5.6KG迷你洗衣机全自动家用波轮宝宝小型加热洗烘干一体机小黄鸭5.6KG迷你洗衣机全自动家用波轮宝宝小型加热洗烘干一体机
+							{{item.goods_name}}
 						</view>
 						<view class="specs" @click="gotoGoodsDetails(1)">
-							规格：默认
+							规格：{{item.option_name}}
 						</view>
 						<view class="money">
 							<view class="text">
-								￥ {{item['showPrice']}}
+								￥ {{item['show_price']}}
 							</view>
 							<view class="btn">
-								<u-number-box :value="item.num" :index="index"
+								<u-number-box :value="item.total" :index="index"
 								:min="1" :max="100"
 								@change="uNumberBoxChange"
 								></u-number-box>
@@ -60,6 +72,7 @@
 				</view>
 			</view>
 		</view>
+		</block>
 	</view>
 </template>
 
@@ -76,7 +89,7 @@
 				this.cartList.map(item => {
 					if(item.checked){
 						count++
-						total += item.price * item.num
+						total += item.price * item.total
 					}
 				})
 				this.totalMoney = total
@@ -92,64 +105,18 @@
 				return this.cartFormatPrice(this.totalMoney);
 			},
 		},
+		onLoad() {
+			this.getDataList()
+		},
 		data() {
 			return {
-				cartList: [
-					{
-						checked:true,
-						price:99900,
-						showPrice:'999.00',
-						num:1,
-						show:false,
-					},
-					{
-						checked:false,
-						price:99900,
-						showPrice:'999.00',
-						num:1,
-						show:false,
-					},
-					{
-						checked:false,
-						price:99902,
-						showPrice:'999.02',
-						num:1,
-						show:false,
-					},
-					{
-						checked:false,
-						price:99900,
-						showPrice:'999.00',
-						num:1,
-						show:false,
-					},
-					{
-						checked:false,
-						price:99900,
-						showPrice:'999.00',
-						num:1,
-						show:false,
-					},
-					{
-						checked:false,
-						price:99900,
-						showPrice:'999.00',
-						num:1,
-						show:false,
-					},
-					{
-						checked:false,
-						price:99900,
-						showPrice:'999.00',
-						num:1,
-						show:false,
-					},
-				],
+				cartList: [],
 				totalMoney:0,
 				testNum:false,
 				isSelectAll:false,
 				btnWidth: 130,
 				isLoading: false,
+				isLogin:true,
 				options: [
 					{
 						text: '收藏',
@@ -167,18 +134,52 @@
 			}
 		},
 		methods:{
+			getDataList(){
+				let that = this
+				this.$api.cart.mycarts().then(res => {
+					that.isLogin = true
+					that.cartList = res.list
+					setTimeout(function(){
+						// 延迟设置
+						that.isSelectAll = (that.selectOrderCount == that.cartList.length)
+					},100)
+				})
+				.catch(err => {
+					if (err.code === 10003){
+						that.isLogin = false
+					}
+				})
+			},
+			gotoLogin(){
+				this.$myRouter.push({name:'index/login'})
+			},
 			gotoGoodsDetails(_goodsId){
 				this.$myRouter.push({name:'goods/details', params: { id: _goodsId }})
+			},
+			saveChangeCart(_item){
+				this.$api.cart.save({
+					goods_id:_item['goods_id'],
+					goods_option_id:_item['goods_option_id'],
+					goods_num:_item['total'],
+					is_selected:_item['checked'],
+				}).then(res => {
+					console.log(res)
+				})
+				.catch(err => {
+					console.log(res)
+				})
 			},
 			cartFormatPrice(_price){
 				return _.formatNumber((_price / 100),'0.00');
 			},
 			uNumberBoxChange(_data){
 				//console.log(_data)
-				this.cartList[_data['index']]['num'] = _data['value']
+				this.cartList[_data['index']]['total'] = _data['value']
+				this.saveChangeCart(this.cartList[_data['index']])
 			},
 			selectBtnClick(_item){
 				_item.checked = !_item.checked
+				this.saveChangeCart(_item)
 			},
 			checkboxChange(e) {
 				let that = this
@@ -191,6 +192,7 @@
 				this.cartList.map(item => {
 					item.checked = _checked
 				})
+				this.$api.cart.selected_all({'is_selected':_checked})
 			},
 			selectAll(e){
 				this.claerAllChecked(this.isSelectAll)
@@ -256,11 +258,12 @@
 					height: 160rpx;
 				}
 				.info{
+					padding-left: 20rpx;
 					.goods-name{
 						display: -webkit-box;
 						overflow:hidden;
 						text-overflow: ellipsis;
-						width: 65vw;
+						width: 62vw;
 						-webkit-line-clamp: 2;
 						-webkit-box-orient: vertical;
 					}
@@ -336,6 +339,24 @@
 			}
 		}
 		&.disabled{
+			background-color: #CCC;
+		}
+	}
+	.confirm-btn {
+		width: 300px;
+		height: 42px;
+		line-height: 42px;
+		border-radius: 30px;
+		margin-top: 40rpx;
+		background-color: #F00;
+		color: #fff;
+		font-size: 32rpx;
+	
+		&:after {
+			border-radius: 60px;
+		}
+		
+		&.disable{
 			background-color: #CCC;
 		}
 	}

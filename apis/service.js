@@ -1,5 +1,9 @@
 import Request from '@/plugins/luch-request/index.js'
 
+function log(message){
+	console.log(message)
+}
+
 // 初始化
 const http = new Request()
 // 设置公共参数
@@ -9,7 +13,7 @@ http.config.baseURL = 'http://127.0.0.1:8181'
 http.interceptors.request.use((config) => { // 可使用async await 做异步操作
   config.header = {
     ...config.header,
-    a: 1 // 演示拦截器header加参
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjIyMTE0MjU2NzksImp3dF92ZXJzaW9uIjoiMS4wIiwibWVtYmVyX2lkIjo1LCJtZW1iZXJfcmVhbG5hbWUiOiJ0ZXN0In0.LIHowLYIMGT4ml-mnFCGa2B5DG1OCsslNveZ5ID4yQQ' // 演示拦截器header加参
   }
   // 演示custom 用处
   // if (config.custom.auth) {
@@ -37,11 +41,11 @@ http.interceptors.response.use((response) => { /* 对响应成功做点什么 �
   //   return response.data
   // }
   const dataAxios = response.data
+  console.log(dataAxios)
   if (dataAxios.code === 0) {
         // 正常返回数据
         return dataAxios.data
       } else {
-        const error = new Error(dataAxios.msg)
         // 需要重新登录
         // 10001 - 无效的 token
         // 10002 - 其它客户端登录
@@ -51,16 +55,18 @@ http.interceptors.response.use((response) => { /* 对响应成功做点什么 �
           10002,
           10003
         ].indexOf(dataAxios.code) >= 0) {
-          Notification.error({
-            title: '身份验证失败',
-            message: '请重新登录'
-          })
+		  uni.showToast({
+			  icon:'none',
+		      title: dataAxios.message,
+		      duration: 1500,
+			  position :'bottom'
+		  });
 		  // 执行退出方法
           // await store.dispatch('d2admin/user/logout', { focus: true, remote: false, back: true })
         } else {
-          log(error)
+          log(dataAxios.message)
         }
-        return Promise.reject(error)
+        return Promise.reject(dataAxios)
       }
 }, (response) => { /*  对响应错误做点什么 （statusCode !== 200）*/
   console.log(response)
