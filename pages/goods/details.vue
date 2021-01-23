@@ -53,7 +53,7 @@
 		</nav-bar>
 		<view class="goods-details-content">
 			<!--banner-->
-			<u-swiper :list="list" height="750" indicator-pos="bottomRight"></u-swiper>
+			<u-swiper :list="wiperList" height="750" indicator-pos="bottomRight"></u-swiper>
 			<!--banner-->
 			<view class="">
 				<view class="goods-title">
@@ -62,14 +62,17 @@
 							<view class="price-number-box">
 								<view class="price-number">
 									<text>￥</text>
-									<text class="yuan">49</text>
-									<text class="decimal">.00</text>
+									<text class="yuan">{{moneyShow(goodsInfo.sell_price,0)}}</text>
+									<text class="decimal">.{{moneyShow(goodsInfo.sell_price,1)}}</text>
 								</view>
-								<u-tag text="新品" mode="plain" size="mini" shape="circle" />
+								<u-tag text="新品" mode="plain" size="mini" 
+								shape="circle" v-if="goodsId.is_new" />
+								<u-tag text="热卖" mode="plain" type="error" 
+								size="mini" shape="circle" v-if="goodsId.is_hot"/>
 							</view>
 							<view class="original-price gray">
 								价格
-								<text class="line-through">￥199.00</text>
+								<text class="line-through">￥{{getMoneyByMinute(goodsInfo.market_price)}}</text>
 							</view>
 						</view>
 						<view class="collection" @tap="collecting">
@@ -79,7 +82,7 @@
 					</view>
 					<view class="goods-name">
 						<view class="box">
-							谈判官明星同款耳坠韩国气质简约显脸瘦的耳环女百搭个性长款耳钉 个性水滴耳环【A2】
+							{{goodsInfo.goods_name}}
 						</view>
 						<view class="share-btn">
 							<u-icon name="share" size="28"></u-icon>
@@ -88,11 +91,16 @@
 					</view>
 					<view class="sale-info-box">
 						<view class="sale-info-tip">
-							此商品将于2019-06-28,10点结束闪购特卖，时尚美饰联合专场
+							{{goodsInfo.sub_title}}
 						</view>
 						<view class="sale-info">
-							<view>月销：2000</view>
-							<view>浙江杭州</view>
+							<view v-if="goodsInfo.is_show_sales">
+								月销：{{goodsInfo.sales+goodsInfo.virtual_sales}}
+							</view>
+							<view v-if="goodsInfo.is_show_stock">
+								库存：{{goodsInfo.stock}}
+							</view>
+							<!-- <view>浙江杭州</view> -->
 						</view>
 					</view>
 					<view class="freight-box">
@@ -266,10 +274,12 @@
 			<u-divider bgColor="f5f5f5" margin-bottom="30" margin-top="30">宝贝详情</u-divider>
 
 			<view class="goods-content-box">
-				 <mp-html :content="goodsContent" :lazy-load="true" />
+				 <mp-html :content="goodsContent" :lazy-load="true">
+					 <u-loadmore :status="'loading'" />
+				 </mp-html>
 			</view>
 
-			<u-gap height="120" bg-color="#f5f5f5"></u-gap>
+			<u-gap height="180" bg-color="#f5f5f5"></u-gap>
 		</view>
 
 		<vk-u-goods-sku-popup
@@ -321,6 +331,7 @@
 	import goodsComment from '@/components/goods-comment'
 	import vkUGoodsSkuPopup from '@/plugins/vk-u-goods-sku-popup/vk-u-goods-sku-popup'
 	import mpHtml from '@/plugins/mp-html/mp-html'
+	import utils from '@/utils/index'
 	var that;
 	const goodsData1 = {
 		"_id":"001",
@@ -415,20 +426,28 @@
 		onLoad() {
 			console.log(this.$Route.query)
 			that = this
+			if (that.$Route.query.id){
+				// that.goodsId = that.$Route.query.id
+				that.goodsId = 46
+				that.getGoodsInfo(that.goodsId)
+			}
+		},
+		onReachBottom(e){
+			if (!this.goodsContentIsLoading) {
+				this.getGoodsContent(this.goodsId)
+			}
 		},
 		data() {
 			return {
-				goodsContent:'<p><img src="https://www.thorui.cn/img/detail/1.jpg"/><img src="https://www.thorui.cn/img/detail/2.jpg"/><img src="https://www.thorui.cn/img/detail/3.jpg"/><img src="https://www.thorui.cn/img/detail/4.jpg"/><img src="https://www.thorui.cn/img/detail/5.jpg"/><img src="https://www.thorui.cn/img/detail/6.jpg"/></p>',
-				goodsId:46,
+				goodsId:0,
 				goodsInfo:{},
+				goodsContent:'',
+				goodsContentIsLoading:false,
 				skuIsShow:false,
 				skuMode:1,
 				closeImage:'/static/images/btn_sku_popup_close.png',
 				scrollTop:0,
-				list: [
-					'https://www.thorui.cn/img/product/11.jpg',
-					'https://www.thorui.cn/img/product/2.png',
-				],
+				wiperList: [],
 				customStyle:{
 					'padding':'16rpx 0'
 				},
@@ -508,9 +527,24 @@
 			closeSku(){
 				this.skuIsShow = false
 			},
+			getMoneyByMinute(_price){
+				return utils.getMoneyByMinute(_price)
+			},
+			moneyShow(_price,_type){
+				let p = utils.getMoneyByMinute(_price).toString()
+				let tmp = p.split('.')
+				return tmp[_type]
+			},
 			getGoodsInfo(_goodsId){
 				this.$api.goods.details({id:_goodsId}).then(res => {
 					that.goodsInfo = res
+					that.wiperList = res.thumbs
+				})
+			},
+			getGoodsContent(_goodsId){
+				this.$api.goods.content({id:_goodsId}).then(res => {
+					that.goodsContent = res
+					that.goodsContentIsLoading = true
 				})
 			},
 			gotoNavigation(_type){
@@ -589,10 +623,11 @@
 					// let goodsInfo = goodsData1;			// 有sku的商品
 					// console.log(goodsInfo)
 					//let goodsInfo = goodsData2;   // 无sku的商品
-					// resolve(goodsInfo);
+					resolve(that.goodsInfo);
+					/*
 					that.$api.goods.details({id:that.goodsId}).then(res => {
 						resolve(res);
-					})
+					})*/
 				});
 			},
 			toast(msg){

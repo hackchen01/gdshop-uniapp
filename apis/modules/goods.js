@@ -6,6 +6,13 @@ export default ( http ) => ({
 			params: query
 		})
 	},
+	content (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/goods/content',
+			params: query
+		})
+	},
 	test () {
 		return 'test'
 	}
