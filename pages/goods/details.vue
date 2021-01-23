@@ -263,17 +263,10 @@
 				</view>
 			</view>
 
-			<u-divider bgColor="f5f5f5" margin-bottom="30" margin-top="30" @click="getGoodsInfo(46)">宝贝详情</u-divider>
+			<u-divider bgColor="f5f5f5" margin-bottom="30" margin-top="30">宝贝详情</u-divider>
 
 			<view class="goods-content-box">
-				 <u-image :src="'https://www.thorui.cn/img/detail/' + (index + 1) + '.jpg'"
-				 v-for="(img, index) in 20" :key="index"
-				 mode="widthFix">
-				 	<u-loading slot="loading"></u-loading>
-					<view slot="error">
-						<u-icon name="warning" size="80"></u-icon>
-					</view>
-				 </u-image>
+				 <mp-html :content="goodsContent" :lazy-load="true" />
 			</view>
 
 			<u-gap height="120" bg-color="#f5f5f5"></u-gap>
@@ -325,8 +318,9 @@
 
 <script>
 	import navBar from '@/plugins/zhouWei-navBar/index'
-	import goodsComment from '@/components/goods-comment.vue'
-	import vkUGoodsSkuPopup from '@/plugins/vk-u-goods-sku-popup/vk-u-goods-sku-popup.vue'
+	import goodsComment from '@/components/goods-comment'
+	import vkUGoodsSkuPopup from '@/plugins/vk-u-goods-sku-popup/vk-u-goods-sku-popup'
+	import mpHtml from '@/plugins/mp-html/mp-html'
 	var that;
 	const goodsData1 = {
 		"_id":"001",
@@ -411,6 +405,7 @@
 			navBar,
 			goodsComment,
 			vkUGoodsSkuPopup,
+			mpHtml
 		},
 		computed:{
 			isShowHomeBtn(){
@@ -423,7 +418,9 @@
 		},
 		data() {
 			return {
+				goodsContent:'<p><img src="https://www.thorui.cn/img/detail/1.jpg"/><img src="https://www.thorui.cn/img/detail/2.jpg"/><img src="https://www.thorui.cn/img/detail/3.jpg"/><img src="https://www.thorui.cn/img/detail/4.jpg"/><img src="https://www.thorui.cn/img/detail/5.jpg"/><img src="https://www.thorui.cn/img/detail/6.jpg"/></p>',
 				goodsId:46,
+				goodsInfo:{},
 				skuIsShow:false,
 				skuMode:1,
 				closeImage:'/static/images/btn_sku_popup_close.png',
@@ -513,8 +510,7 @@
 			},
 			getGoodsInfo(_goodsId){
 				this.$api.goods.details({id:_goodsId}).then(res => {
-					console.log(res)
-					goodsData1 = res
+					that.goodsInfo = res
 				})
 			},
 			gotoNavigation(_type){
@@ -574,9 +570,9 @@
 						that.$myRouter.push({
 							name:'order/create',
 							params:{
-								goods_id:selectShop.goods_id,
+								goods_id:that.goodsId,
 								buy_num:selectShop.buy_num,
-								sku_id:selectShop.sku_id,
+								option_id:selectShop.id,
 							},
 						})
 					}
@@ -969,7 +965,7 @@
 		border-radius: 24rpx;
 	}
 	.goods-content-box{
-		.u-image{
+		/deep/ ._img{ // 修复富文本里面图片空白的问题
 			vertical-align: middle;
 			font-size: 0;
 		}
