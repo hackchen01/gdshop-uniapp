@@ -3,19 +3,27 @@
 		<view class="top">
 			<view class="item">
 				<view class="left">收货人</view>
-				<input type="text" placeholder-class="line" placeholder="请填写收货人姓名" />
+				<input type="text" placeholder-class="line"
+				 v-model="formData.addressee"
+				 placeholder="请填写收货人姓名" />
 			</view>
 			<view class="item">
 				<view class="left">手机号码</view>
-				<input type="text" placeholder-class="line" placeholder="请填写收货人手机号" />
+				<input type="text" placeholder-class="line" 
+				v-model="formData.mobile"
+				placeholder="请填写收货人手机号" />
 			</view>
 			<view class="item" @tap="showRegionPicker">
 				<view class="left">所在地区</view>
-				<input disabled v-model="address" type="text" placeholder-class="line" placeholder="省市区县、乡镇等" />
+				<input disabled v-model="address" type="text" 
+				placeholder-class="line" 
+				placeholder="省市区县、乡镇等" />
 			</view>
 			<view class="item address">
 				<view class="left">详细地址</view>
-				<textarea type="text" placeholder-class="line" placeholder="街道、楼牌等" />
+				<textarea type="text" placeholder-class="line" 
+				v-model="formData.address"
+				placeholder="街道、楼牌等" />
 			</view>
 		</view>
 		<view class="bottom">
@@ -33,7 +41,9 @@
 					<view class="set">设置默认地址</view>
 					<view class="tips">提醒：每次下单会默认推荐该地址</view>
 				</view>
-				<view class="right"><switch color="red" @change="setDefault" /></view>
+				<view class="right">
+					<u-switch active-color="red" v-model="checked"></u-switch>
+				</view>
 			</view>
       <view class="addSite" @tap="toAddSite">
         <view class="add">
@@ -41,7 +51,10 @@
         </view>
       </view>
 		</view>
-		<city-select v-model="show" @city-change="cityChange"></city-select>
+		<city-select 
+		ref="citySelect"
+		v-model="show" 
+		@city-change="cityChange"></city-select>
 	</view>
 </template>
 
@@ -49,25 +62,72 @@
 	import citySelect from '@/components/u-city-select'
 export default {
 	components: {
-			citySelect
-		},
-		onLoad() {
-			console.log(this.$Route.query)
-		},
+		citySelect
+	},
+	onLoad() {
+		console.log(this.$Route.query)
+		if(this.$Route.query.id){
+			this.getData(this.$Route.query.id)
+		}
+	},
 	data() {
 		return {
+			addressId:0,
 			show: false,
-			address:''
+			checked: true,
+			formData : {
+				id:0,
+				"addressee": "",
+				"mobile": "",
+				"province": "",
+				"city": "",
+				"area": "",
+				"address": "",
+				"address_code": "",
+				"is_default": 0
+			},
+			address:'',
 		};
 	},
 	methods: {
-		setDefault() {},
 		showRegionPicker() {
 			this.show = true;
 		},
+		getData(_id){
+			const that = this
+			that.addressId = _id
+			this.$api.member_address.details({id:_id}).then(res => {
+				console.log(res)
+				that.formData = res
+				that.address = that.formData.province + '-' 
+				+ that.formData.city + '-' + that.formData.area
+				that.$refs['citySelect'].setProvince(that.formData.province)
+				that.$refs['citySelect'].setCity(that.formData.city)
+				that.$refs['citySelect'].setArea(that.formData.area)
+			})
+		},
 		cityChange(e) {
 			console.log(e)
+			this.formData.address_code = e.area.value
 			this.address = e.province.label + '-' + e.city.label + '-' + e.area.label
+			this.formData.province = e.province.label
+			this.formData.city = e.city.label
+			this.formData.area = e.area.label
+		},
+		toAddSite(){
+			const that = this
+			this.formData.is_default = this.checked ? 1 : 0;
+			let methodFn
+			if (this.addressId > 0) {
+				this.formData.id = this.addressId
+				methodFn = this.$api.member_address.save
+			}
+			else{
+				methodFn = this.$api.member_address.add
+			}
+			methodFn(this.formData).then(res => {
+				that.$u.toast('保存成功')
+			})
 		}
 	}
 };
@@ -135,7 +195,7 @@ export default {
 	}
 	.bottom {
 		margin-top: 20rpx;
-		padding: 40rpx;
+		padding: 20rpx;
 		padding-right: 0;
 		background-color: #ffffff;
 		font-size: 28rpx;
