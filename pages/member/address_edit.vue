@@ -102,10 +102,14 @@ export default {
 				that.formData = res
 				that.address = that.formData.province + '-' 
 				+ that.formData.city + '-' + that.formData.area + '-' + that.formData.street
-				that.$refs['citySelect'].setProvince(that.formData.province)
-				that.$refs['citySelect'].setCity(that.formData.city)
-				that.$refs['citySelect'].setArea(that.formData.area)
-				that.$refs['citySelect'].setStreet(that.formData.street)
+				setTimeout(function() {
+					that.$refs['citySelect'].reloadSelect(
+						that.formData.province,
+						that.formData.city,
+						that.formData.area,
+						that.formData.street
+						)
+				}, 1500);
 			})
 		},
 		cityChange(e) {

@@ -121,12 +121,15 @@
 				isChooseC: false, //是否已经选择了市
 				city: 0, //市级下标
 				citys: [],
+				hideCity:false, // 隐藏市
 				isChooseA: false, //是否已经选择了区
 				area: 0, //区级下标
 				areas: [],
+				hideArea:false, // 隐藏区级
 				isChooseS: false, //是否已经选择了街道
 				street: 0, //街道下标
 				streets: [],
+				hideStreet:false, // 隐藏街道
 				tabsIndex: 0,
 			}
 		},
@@ -188,8 +191,15 @@
 				this.setProvince(_province, '');
 				// 判断如果 citys 为空，先获取
 				if (this.citys.length < 1){
-					this.getCity(this.provinces[this.province]['value'],function(){
-						
+					that.getCity(that.provinces[that.province]['value'],function(){
+						that.setCity(_city, '');
+						that.getArea(that.citys[that.city]['value'],function(){
+							that.setArea(_area, '');
+							that.getStreet(that.areas[that.area]['value'],function(){
+								that.setStreet(_street, '');
+								that.tabsIndex = 3;
+							})
+						})
 					})
 				}
 			},
