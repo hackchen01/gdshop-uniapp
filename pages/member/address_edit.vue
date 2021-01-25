@@ -15,9 +15,9 @@
 			</view>
 			<view class="item" @tap="showRegionPicker">
 				<view class="left">所在地区</view>
-				<input disabled v-model="address" type="text" 
-				placeholder-class="line" 
-				placeholder="省市区县、乡镇等" />
+				<view class="">
+					{{address}}
+				</view>
 			</view>
 			<view class="item address">
 				<view class="left">详细地址</view>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-	import citySelect from '@/components/u-city-select'
+	import citySelect from '@/components/u-city-select-remove'
 export default {
 	components: {
 		citySelect
@@ -82,6 +82,7 @@ export default {
 				"province": "",
 				"city": "",
 				"area": "",
+				"street": "",
 				"address": "",
 				"address_code": "",
 				"is_default": 0
@@ -100,19 +101,20 @@ export default {
 				console.log(res)
 				that.formData = res
 				that.address = that.formData.province + '-' 
-				+ that.formData.city + '-' + that.formData.area
+				+ that.formData.city + '-' + that.formData.area + '-' + that.formData.street
 				that.$refs['citySelect'].setProvince(that.formData.province)
 				that.$refs['citySelect'].setCity(that.formData.city)
 				that.$refs['citySelect'].setArea(that.formData.area)
+				that.$refs['citySelect'].setStreet(that.formData.street)
 			})
 		},
 		cityChange(e) {
-			console.log(e)
-			this.formData.address_code = e.area.value
-			this.address = e.province.label + '-' + e.city.label + '-' + e.area.label
+			this.formData.address_code = e.street.value
+			this.address = e.province.label + '-' + e.city.label + '-' + e.area.label + '-' + e.street.label
 			this.formData.province = e.province.label
 			this.formData.city = e.city.label
 			this.formData.area = e.area.label
+			this.formData.street = e.street.label
 		},
 		toAddSite(){
 			const that = this
