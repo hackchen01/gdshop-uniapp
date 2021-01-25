@@ -183,6 +183,16 @@
 				};
 				that.getProvince()
 			},
+			reloadSelect(_province,_city,_area,_street){
+				const that = this
+				this.setProvince(_province, '');
+				// 判断如果 citys 为空，先获取
+				if (this.citys.length < 1){
+					this.getCity(this.provinces[this.province]['value'],function(){
+						
+					})
+				}
+			},
 			getProvince(){
 				const that = this
 				this.$api.area.area({level:1}).then(res => {
@@ -196,10 +206,13 @@
 					}
 				})
 			},
-			getCity(pcode){
+			getCity(pcode,cbFn){
 				const that = this
 				this.$api.area.area({p_code:pcode}).then(res => {
 					that.citys = res
+					if typeof cbFn == 'function'{
+						cbFn(res)
+					}
 				})
 			},
 			setCity(label = "", value = "") {
@@ -209,10 +222,13 @@
 					}
 				})
 			},
-			getArea(pcode){
+			getArea(pcode,cbFn){
 				const that = this
 				this.$api.area.area({p_code:pcode}).then(res => {
 					that.areas = res
+					if typeof cbFn == 'function'{
+						cbFn(res)
+					}
 				})
 			},
 			setArea(label = "", value = "") {
@@ -223,11 +239,14 @@
 					}
 				})
 			},
-			getStreet(pcode){
+			getStreet(pcode,cbFn){
 				const that = this
 				this.$api.area.area({p_code:pcode}).then(res => {
 					console.log(res)
 					that.streets = res
+					if typeof cbFn == 'function'{
+						cbFn(res)
+					}
 				})
 			},
 			setStreet(label = "", value = "") {
