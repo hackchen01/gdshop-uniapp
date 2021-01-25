@@ -1,7 +1,8 @@
 <template>
 	<u-popup v-model="value" mode="bottom" :popup="false" :mask="true" :closeable="true" :safe-area-inset-bottom="true"
 	 close-icon-color="#ffffff" :z-index="uZIndex" :maskCloseAble="maskCloseAble" @close="close">
-		<u-tabs v-if="value" :list="genTabsList" :is-scroll="true" :current="tabsIndex" @change="tabsChange" ref="tabs"></u-tabs>
+		<gdshop-tabs v-if="value" :list="genTabsList" :is-scroll="true" 
+		:current="tabsIndex" @change="tabsChange" ref="tabs"></gdshop-tabs>
 		<view class="area-box">
 			<view class="u-flex" :class="{ 'change':isChange }">
 				<view class="area-item">
@@ -19,7 +20,7 @@
 						</scroll-view>
 					</view>
 				</view>
-				<view class="area-item">
+				<view class="area-item" v-if="!hideCity">
 					<view class="u-padding-10 u-bg-gray" style="height: 100%;">
 						<scroll-view :scroll-y="true" style="height: 100%">
 							<u-cell-group v-if="isChooseP">
@@ -35,7 +36,7 @@
 					</view>
 				</view>
 
-				<view class="area-item">
+				<view class="area-item" v-if="!hideArea">
 					<view class="u-padding-10 u-bg-gray" style="height: 100%;">
 						<scroll-view :scroll-y="true" style="height: 100%">
 							<u-cell-group v-if="isChooseC">
@@ -51,7 +52,7 @@
 					</view>
 				</view>
 				
-				<view class="area-item">
+				<view class="area-item" v-if="!hideStreet">
 					<view class="u-padding-10 u-bg-gray" style="height: 100%;">
 						<scroll-view :scroll-y="true" style="height: 100%">
 							<u-cell-group v-if="isChooseA">
@@ -72,6 +73,7 @@
 </template>
 
 <script>
+	import gdshopTabs from '@/components/gdshop-tabs'
 	/**
 	 * city-select 省市区级联选择器
 	 * @property {String Number} z-index 弹出时的z-index值（默认1075）
@@ -81,6 +83,9 @@
 	 */
 	export default {
 		name: 'u-city-select',
+		components:{
+			gdshopTabs
+		},
 		props: {
 			// 通过双向绑定控制组件的弹出与收起
 			value: {
@@ -114,6 +119,7 @@
 		},
 		data() {
 			return {
+				isGetData: true,
 				cityValue: "",
 				isChooseP: false, //是否已经选择了省
 				province: 0, //省级下标
@@ -142,24 +148,28 @@
 			},
 			genTabsList() {
 				let tabsList = [{
-					name: "请选择"
+					name: "请选择",
+					show: true,
 				}];
 				if (this.isChooseP) {
 					tabsList[0]['name'] = this.provinces[this.province]['label'];
 					tabsList[1] = {
-						name: "请选择"
+						name: "请选择",
+						show: this.hideCity == false,
 					};
 				}
 				if (this.isChooseC) {
 					tabsList[1]['name'] = this.citys[this.city]['label'];
 					tabsList[2] = {
-						name: "请选择"
+						name: "请选择",
+						show: this.hideArea == false,
 					};
 				}
 				if (this.isChooseA) {
 					tabsList[2]['name'] = this.areas[this.area]['label'];
 					tabsList[3] = {
-						name: "请选择"
+						name: "请选择",
+						show: this.hideStreet == false,
 					};
 				}
 				if (this.isChooseS) {
@@ -186,22 +196,23 @@
 				};
 				that.getProvince()
 			},
-			reloadSelect(_province,_city,_area,_street){
+			reloadSelect(_code,_region){
 				const that = this
-				this.setProvince(_province, '');
-				// 判断如果 citys 为空，先获取
-				if (this.citys.length < 1){
-					that.getCity(that.provinces[that.province]['value'],function(){
-						that.setCity(_city, '');
-						that.getArea(that.citys[that.city]['value'],function(){
-							that.setArea(_area, '');
-							that.getStreet(that.areas[that.area]['value'],function(){
-								that.setStreet(_street, '');
-								that.tabsIndex = 3;
-							})
-						})
-					})
-				}
+				that.isGetData = false
+				this.$api.area.pcas({
+					code:_code,
+					type:'cas'
+					}).then(res => {
+					that.citys = res['citys']
+					that.areas = res['areas']
+					that.streets = res['streets']
+					that.setProvince(_region[0], '');
+					that.setCity(_region[1], '');
+					that.setArea(_region[2], '');
+					that.setStreet(_region[3], '');
+					setTimeout(function() {that.isGetData = true;}, 1500);
+				})
+				
 			},
 			getProvince(){
 				const that = this
@@ -244,15 +255,13 @@
 			setArea(label = "", value = "") {
 				this.areas.map((v, k) => {
 					if (value ? v.value == value : v.label == label) {
-						this.isChooseA = true;
-						this.area = k;
+						this.areaChange(k)
 					}
 				})
 			},
 			getStreet(pcode,cbFn){
 				const that = this
 				this.$api.area.area({p_code:pcode}).then(res => {
-					console.log(res)
 					that.streets = res
 					if (typeof cbFn == 'function'){
 						cbFn(res)
@@ -274,6 +283,7 @@
 				this.tabsIndex = index;
 			},
 			provinceChange(index) {
+				const that = this
 				this.isChooseP = true;
 				this.isChooseC = false;
 				this.isChooseA = false;
@@ -281,8 +291,17 @@
 				this.province = index;
 				// this.citys = citys[index];
 				console.log(this.provinces[index])
-				this.getCity(this.provinces[index]['value'])
+				if (true == that.isGetData){
+					this.getCity(this.provinces[index]['value'])
+				}
 				this.tabsIndex = 1;
+				this.hideCity = this.provinces[index]['is_next'] == 0
+				// 如果 隐藏城市，自动加载下一级
+				if (that.hideCity && true == that.isGetData){
+					setTimeout(function() {
+						that.cityChange(0)
+					}, 500);
+				}
 			},
 			cityChange(index) {
 				this.isChooseC = true;
@@ -291,14 +310,18 @@
 				this.city = index;
 				// this.areas = areas[this.province][index];
 				console.log(this.citys[index])
-				this.getArea(this.citys[index]['value'])
+				if (true == this.isGetData){
+					this.getArea(this.citys[index]['value'])
+				}
 				this.tabsIndex = 2;
 			},
 			areaChange(index) {
 				this.isChooseA = true;
 				this.isChooseS = false;
 				this.area = index;
-				this.getStreet(this.areas[index]['value'])
+				if (true == this.isGetData){
+					this.getStreet(this.areas[index]['value'])
+				}
 				this.tabsIndex = 3;
 			},
 			streetChange(index){
@@ -339,6 +362,8 @@
 		.area-item {
 			width: 33.3333333%;
 			height: 800rpx;
+			border-right: 1px solid #82848A;
+			border-top: 1px solid #82848A;
 		}
 	}
 </style>

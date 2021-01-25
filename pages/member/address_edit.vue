@@ -100,25 +100,39 @@ export default {
 			this.$api.member_address.details({id:_id}).then(res => {
 				console.log(res)
 				that.formData = res
-				that.address = that.formData.province + '-' 
-				+ that.formData.city + '-' + that.formData.area + '-' + that.formData.street
+				that.address = that.getAddressText(res)
 				setTimeout(function() {
-					that.$refs['citySelect'].reloadSelect(
+					that.$refs['citySelect'].reloadSelect(res.address_code,[
 						that.formData.province,
 						that.formData.city,
 						that.formData.area,
-						that.formData.street
+						that.formData.street]
 						)
-				}, 1500);
+				}, 500);
 			})
+		},
+		getAddressText(e){
+			let texts = []
+			let xunhuanNames = [
+				'province',
+				'city',
+				'area',
+				'street',
+			]
+			for	(var k in xunhuanNames){
+				if('不显示' != e[xunhuanNames[k]]){
+					texts.push(e[xunhuanNames[k]])
+				}
+			}
+			return texts.join('-')
 		},
 		cityChange(e) {
 			this.formData.address_code = e.street.value
-			this.address = e.province.label + '-' + e.city.label + '-' + e.area.label + '-' + e.street.label
 			this.formData.province = e.province.label
 			this.formData.city = e.city.label
 			this.formData.area = e.area.label
 			this.formData.street = e.street.label
+			this.address = this.getAddressText(this.formData)
 		},
 		toAddSite(){
 			const that = this
