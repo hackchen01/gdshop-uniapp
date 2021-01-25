@@ -210,7 +210,7 @@
 				const that = this
 				this.$api.area.area({p_code:pcode}).then(res => {
 					that.citys = res
-					if typeof cbFn == 'function'{
+					if (typeof cbFn == 'function'){
 						cbFn(res)
 					}
 				})
@@ -226,7 +226,7 @@
 				const that = this
 				this.$api.area.area({p_code:pcode}).then(res => {
 					that.areas = res
-					if typeof cbFn == 'function'{
+					if (typeof cbFn == 'function'){
 						cbFn(res)
 					}
 				})
@@ -244,7 +244,7 @@
 				this.$api.area.area({p_code:pcode}).then(res => {
 					console.log(res)
 					that.streets = res
-					if typeof cbFn == 'function'{
+					if (typeof cbFn == 'function'){
 						cbFn(res)
 					}
 				})
