@@ -1,5 +1,5 @@
 import Request from '@/plugins/luch-request/index.js'
-
+import store from '@/store/index'
 function log(message){
 	console.log(message)
 }
@@ -13,7 +13,7 @@ http.config.baseURL = 'http://127.0.0.1:8181'
 http.interceptors.request.use((config) => { // 可使用async await 做异步操作
   config.header = {
     ...config.header,
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjIyMTE2NTg2MTUsImp3dF92ZXJzaW9uIjoiMS4wIiwibWVtYmVyX2lkIjo1LCJtZW1iZXJfcmVhbG5hbWUiOiJ0ZXN0In0.qaBwLKa92FgB4epXldsNBMKxasEQVkvGdxVrUbcUeNs' // 演示拦截器header加参
+    token: store.state.memberToken
   }
   // 演示custom 用处
   // if (config.custom.auth) {

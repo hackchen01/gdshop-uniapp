@@ -96,14 +96,23 @@
 				that.isLoading = true
                 that.$refs.uForm.validate(valid => {
 					if (valid) {
-						console.log('验证通过');
+						that.$api.home.login({
+							account:that.form.mobile,
+							password:that.form.password,
+						}).then(res => {
+							that.isLoading = false
+							console.log(res)
+							// 设置 store状态
+							that.$store.commit('setMemberLogin',res)
+							that.$u.toast('登陆成功')
+							that.$myRouter.back()
+						}).catch(err => {
+							that.isLoading = false
+							that.$u.toast(err.message)
+						})
 					} else {
 						console.log('验证失败');
 					}
-					
-					setTimeout(function() {
-						that.isLoading = false
-					}, 3000);
 				});
             },
             getUserInfo(userId, token) {
