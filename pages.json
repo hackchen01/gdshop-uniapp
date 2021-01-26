@@ -7,6 +7,7 @@
 			"path": "pages/index/index",
 			"aliasPath":"/",
 			"name":"index/index",
+			"guest":true,
 			"meta":{
 				"title": "gdshop商城"
 			},
@@ -17,6 +18,7 @@
 		{
 			"path": "pages/index/login",
 			"name":"index/login",
+			"guest":true,
 			"meta":{
 				"title": "登陆"
 			},
@@ -27,6 +29,7 @@
 		{
 			"path": "pages/index/register",
 			"name":"index/register",
+			"guest":true,
 			"meta":{
 				"title": "注册"
 			},
@@ -37,6 +40,7 @@
 		{
 			"path": "pages/index/forget",
 			"name":"index/forget",
+			"guest":true,
 			"meta":{
 				"title": "找回密码"
 			},
@@ -67,6 +71,7 @@
 		{
 			"path": "pages/classify/index",
 			"name":"classify/index",
+			"guest":true,
 			"meta":{
 				"title": "分类"
 			},
@@ -77,6 +82,7 @@
 		{
 			"path": "pages/cart/index",
 			"name":"cart/index",
+			"guest":true,
 			"meta":{
 				"title": "购物车"
 			},
@@ -87,6 +93,7 @@
 		{
 			"path": "pages/member/index",
 			"name":"member/index",
+			"guest":true,
 			"meta":{
 				"title": "我的"
 			},
@@ -97,6 +104,7 @@
 		{
 			"path": "pages/index/msg",
 			"name":"index/msg",
+			"guest":true,
 			"meta":{
 				"title": "提示"
 			},
@@ -177,6 +185,7 @@
 		{
 			"path": "pages/member/setting",
 			"name":"member/setting",
+			"guest":true,
 			"meta":{
 				"title": "设置"
 			},
@@ -207,6 +216,7 @@
 		{
 			"path": "pages/goods/list",
 			"name":"goods/list",
+			"guest":true,
 			"meta":{
 				"title": "商品列表"
 			},
@@ -226,6 +236,7 @@
 		{
 			"path": "pages/goods/details",
 			"name":"goods/details",
+			"guest":true,
 			"meta":{
 				"title": "商品详情"
 			},
@@ -246,6 +257,7 @@
 		{
 			"path": "pages/goods/search",
 			"name":"goods/search",
+			"guest":true,
 			"meta":{
 				"title": "搜索"
 			},

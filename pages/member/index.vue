@@ -7,20 +7,20 @@
 				<view class="user-info">
 					<view class="bntImg" @click="goPersonal">
 						<u-avatar
-						:src="userInfo.avatar"
+						:src="memberInfo.avatar"
 						:size="120"
 						></u-avatar>
 					</view>
 					<view class="info">
-						<view class="name" v-if="userInfo.uid">
-							<text @click="goPersonal">{{userInfo.nickname}}</text>
-							<view class="vip" v-if="userInfo.vip">
-								<image :src="userInfo.vip_icon" alt="">
-									<view style="margin-left: 10rpx;" class="vip-txt">{{userInfo.vip_name}}</view>
+						<view class="name">
+							<text @click="goPersonal">{{memberInfo.nickname}}</text>
+							<view class="vip" v-if="memberInfo.vip">
+								<image :src="memberInfo.vip_icon" alt="">
+									<view style="margin-left: 10rpx;" class="vip-txt">{{memberInfo.vip_name}}</view>
 							</view>
 						</view>
-						<view class="num" v-if="userInfo.phone">
-							<view class="num-txt">ID：{{userInfo.uid}}</view>
+						<view class="num" v-if="memberInfo.mobile">
+							<view class="num-txt">ID：{{memberInfo.id}}</view>
 						</view>
 					</view>
 				</view>
@@ -33,11 +33,11 @@
 			<u-grid :col="3" class="num-wrapper" @click="numGridClick" hover-class="none">
 				<u-grid-item index="balance">
 					<view class="grid-text">余额</view>
-					<view class="grid-text">0</view>
+					<view class="grid-text">{{memberInfo.money_coin}}</view>
 				</u-grid-item>
 				<u-grid-item index="integral">
 					<view class="grid-text">积分</view>
-					<view class="grid-text">0</view>
+					<view class="grid-text">{{memberInfo.integral_coin}}</view>
 				</u-grid-item>
 				<u-grid-item index="coupon">
 					<view class="grid-text">优惠券</view>
@@ -113,19 +113,26 @@
 	export default {
 		data() {
 			return {
-				userInfo: {
-					uid: 1,
-					nickname: '昵称',
+				defaultMemberInfo:{
+					id: 0,
+					nickname: '请登陆',
 					avatar: 'http://woyinshua-order-img.gida.cn//icon/avatar/1.jpg',
-					vip: false,
-					phone: '13011112222',
-					balance_func_status: true,
-					is_complete: 0
+					money_coin:0,
+					integral_coin:0,
 				},
+				memberInfo: {},
 				isLogin: false,
 				isWeixin: true,
 				MyMenus: [],
 				orderMenu: []
+			}
+		},
+		onShow() {
+			if(this.$store.state.memberToken){
+				this.memberInfo = this.$store.state.memberInfo
+			}
+			else{
+				this.memberInfo = this.defaultMemberInfo
 			}
 		},
 		methods: {

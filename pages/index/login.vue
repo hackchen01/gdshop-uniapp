@@ -96,7 +96,7 @@
 				that.isLoading = true
                 that.$refs.uForm.validate(valid => {
 					if (valid) {
-						that.$api.home.login({
+						that.$api.member.login({
 							account:that.form.mobile,
 							password:that.form.password,
 						}).then(res => {

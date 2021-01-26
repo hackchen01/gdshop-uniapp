@@ -6,7 +6,7 @@
 			<u-cell-item title="关于我们" @click="gotoArticle('about_us')"></u-cell-item>
 		</u-cell-group>
 		
-		<view class="addSite" @tap="layout">
+		<view class="addSite" v-if="isShowLayout" @tap="layout">
 			<view class="add">
 				退出登录
 			</view>
@@ -17,12 +17,34 @@
 <script>
 	import utils from '@/utils/index.js'
 	export default {
+		data() {
+			return {
+				isShowLayout:true
+			}
+		},
+		onShow() {
+			this.isShowLayout = this.$store.state.memberToken.length > 0
+		},
+		onLoad() {
+			
+		},
 		methods:{
 			gotoArticle(_type){
 				utils.article.gotoArticle(_type)
 			},
 			layout(){
-				this.$myRouter.push({name:'index/login'})
+				const that = this
+				uni.showModal({
+					content:'确认退出吗？',
+					success:function(res){
+						if(res.confirm){
+							that.$api.member.layout().then(res => {
+								that.$store.commit('memberLayout')
+								that.$myRouter.push({name:'member/index'})
+							})
+						}
+					}
+				})
 			}
 		}
 	}

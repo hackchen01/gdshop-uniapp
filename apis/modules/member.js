@@ -1,12 +1,15 @@
 export default ( http ) => ({
-	login (query = {}) {
+	login (data = {}) {
 		return http.request({
 			method: 'POST',
-			url: '/configs/get_pager',
-			params: query
+			url: '/login',
+			data
 		})
 	},
-	test () {
-		return 'test'
-	}
+	layout () {
+		return http.request({
+			method: 'GET',
+			url: '/layout'
+		})
+	},
 })
