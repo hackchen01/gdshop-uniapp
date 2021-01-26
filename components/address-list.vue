@@ -7,14 +7,14 @@
 			</view>
 			<view class="main">
 				<view class="top" @click="selectAddress(res)">
-					<view class="name">{{ res.name }}</view>
-					<view class="phone">{{ res.phone }}</view>
+					<view class="name">{{ res.addressee }}</view>
+					<view class="phone">{{ res.mobile }}</view>
 					<view class="tag">
 						<text v-for="(item, index) in res.tag" :key="index" :class="{red:item.tagText=='默认'}">{{ item.tagText }}</text>
 					</view>
 				</view>
 				<view class="bottom">
-					<text @click="selectAddress(res)">{{ res.site }}</text>
+					<text @click="selectAddress(res)">{{ getAddressText(res) }}</text>
 				</view>
 			</view>
 			<view class="edit">
@@ -64,7 +64,22 @@ export default {
 		},
 		selectAddress(_row){
 			this.$emit('selectAddress',_row)
-		}
+		},
+		getAddressText(e){
+			let texts = []
+			let xunhuanNames = [
+				'province',
+				'city',
+				'area',
+				'street',
+			]
+			for	(var k in xunhuanNames){
+				if('不显示' != e[xunhuanNames[k]]){
+					texts.push(e[xunhuanNames[k]])
+				}
+			}
+			return texts.join('-')
+		},
 	}
 };
 </script>

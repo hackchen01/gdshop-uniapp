@@ -27,6 +27,7 @@
 			</view>
 		</view>
 		<view class="bottom">
+			<!-- 
 			<view class="tag">
 				<view class="left">标签</view>
 				<view class="right">
@@ -35,7 +36,7 @@
 					<text class="tags">学校</text>
 					<view class="tags plus"><u-icon size="22" name="plus"></u-icon></view>
 				</view>
-			</view>
+			</view> -->
 			<view class="default">
 				<view class="left">
 					<view class="set">设置默认地址</view>
@@ -45,11 +46,14 @@
 					<u-switch active-color="red" v-model="checked"></u-switch>
 				</view>
 			</view>
-      <view class="addSite" @tap="toAddSite">
-        <view class="add">
-          保存
-        </view>
-      </view>
+			<view class="del-box" v-if="addressId > 0">
+				<view class="btn-del" @click="delAddress">删除收货地址</view>
+			</view>
+			  <view class="addSite" @tap="toAddSite">
+				<view class="add">
+				  保存
+				</view>
+			  </view>
 		</view>
 		<city-select 
 		ref="citySelect"
@@ -109,6 +113,12 @@ export default {
 						that.formData.street]
 						)
 				}, 500);
+			}).catch(err => {
+				console.log(err)
+				that.$u.toast(err.message)
+				setTimeout(function () {
+					that.$myRouter.back()
+				},1000)
 			})
 		},
 		getAddressText(e){
@@ -146,7 +156,25 @@ export default {
 				methodFn = this.$api.member_address.add
 			}
 			methodFn(this.formData).then(res => {
+				uni.$emit('address_list_is_reload')
 				that.$u.toast('保存成功')
+			})
+		},
+		delAddress(){
+			const that = this
+			uni.showModal({
+				content:'确认删除地址吗？',
+				success:function(res){
+					if (res.confirm) {
+						that.$api.member_address.del({id:that.addressId}).then(res => {
+							that.$u.toast('删除成功')
+							uni.$emit('address_list_is_reload')
+							setTimeout(function () {
+								that.$myRouter.back()
+							},1000)
+						})
+					}
+				}
 			})
 		}
 	}
@@ -257,6 +285,11 @@ export default {
 			}
 			.right {
 			}
+		}
+		.btn-del{
+			margin-top: 20rpx;
+			padding: 10rpx;
+			color: #F00;
 		}
 	}
 }

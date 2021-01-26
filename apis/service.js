@@ -13,7 +13,7 @@ http.config.baseURL = 'http://127.0.0.1:8181'
 http.interceptors.request.use((config) => { // 可使用async await 做异步操作
   config.header = {
     ...config.header,
-    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjIyMTE0MjU2NzksImp3dF92ZXJzaW9uIjoiMS4wIiwibWVtYmVyX2lkIjo1LCJtZW1iZXJfcmVhbG5hbWUiOiJ0ZXN0In0.LIHowLYIMGT4ml-mnFCGa2B5DG1OCsslNveZ5ID4yQQ' // 演示拦截器header加参
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjIyMTE2NDY1MDcsImp3dF92ZXJzaW9uIjoiMS4wIiwibWVtYmVyX2lkIjo1LCJtZW1iZXJfcmVhbG5hbWUiOiJ0ZXN0In0.YaYMkXBVcJCPyKNG_AFM6G6eqqc0XoIY47f-zVojCpc' // 演示拦截器header加参
   }
   // 演示custom 用处
   // if (config.custom.auth) {
@@ -41,7 +41,6 @@ http.interceptors.response.use((response) => { /* 对响应成功做点什么 �
   //   return response.data
   // }
   const dataAxios = response.data
-  console.log(dataAxios)
   if (dataAxios.code === 0) {
         // 正常返回数据
         return dataAxios.data

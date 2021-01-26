@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<address-list :addressList="siteList"></address-list>
+		<address-list :addressList="addressList"></address-list>
 	</view>
 </template>
 
@@ -12,48 +12,26 @@ export default {
 	},
 	data() {
 		return {
-			siteList: []
+			addressList: []
 		};
 	},
 	onLoad() {
-		this.getData();
+		const that = this
+		that.getData();
+		uni.$on('address_list_is_reload',function(){
+			that.getData();
+		})
+	},
+	onUnload() {
+		uni.$off('address_list_is_reload')
 	},
 	methods: {
 		getData() {
-			this.siteList = [
-				{
-					id: 15,
-					name: '游X',
-					phone: '183****5523',
-					tag: [
-						{
-							tagText: '默认'
-						},
-						{
-							tagText: '家'
-						}
-					],
-					site: '广东省深圳市宝安区 自由路66号'
-				},
-				{
-					id: 16,
-					name: '李XX',
-					phone: '183****5555',
-					tag: [
-						{
-							tagText: '公司'
-						}
-					],
-					site: '广东省深圳市宝安区 翻身路xx号'
-				},
-				{
-					id: 17,
-					name: '王YY',
-					phone: '153****5555',
-					tag: [],
-					site: '广东省深圳市宝安区 平安路13号'
-				}
-			];
+			const that = this
+			that.$api.member_address.list({page:1,page_size:9999}).then(res => {
+				console.log(res)
+				that.addressList = res.list
+			})
 		}
 	}
 };
