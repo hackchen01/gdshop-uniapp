@@ -135,6 +135,11 @@
 		},
 		data() {
 			return {
+				queryData: {
+					goods_id:'',
+					goods_num:'',
+					goods_option_id:'',
+				},
 				addressInfo: {},
 				couponList: [],
 				selectCoupons: [],
@@ -191,7 +196,10 @@
 		},
 		onLoad() {
 			console.log(this.$Route.query)
-			
+			if(!this.checkQueryData(this.$Route.query)){
+				return
+			}
+			this.getCreateData()
 		},
 		methods:{
 			selectAddress(){
@@ -204,6 +212,37 @@
 				})
 				
 				this.$myRouter.push({name:'order/select_address',params:{selected:this.addressInfo.id}})
+			},
+			checkQueryData(_query){
+				if(!_query.goods_id){
+					this.$u.toast('goods_id 不能为空')
+					return false
+				}
+				if(!_query.goods_num){
+					this.$u.toast('goods_num 不能为空')
+					return false
+				}
+				if(!_query.goods_option_id){
+					this.$u.toast('goods_option_id 不能为空')
+					return false
+				}
+				
+				this.queryData.goods_id = _query.goods_id
+				this.queryData.goods_num = _query.goods_num
+				this.queryData.goods_option_id = _query.goods_option_id
+				
+				return true
+			},
+			getCreateData(){
+				this.getCreateDataByGoodsId()
+			},
+			getCreateDataByGoodsId(){
+				this.$api.order.create(this.queryData).then(res => {
+					console.log(res)
+				})
+			},
+			getCreateDataByCart(){
+				
 			},
 			// 总价
 			totalPrice(item) {
