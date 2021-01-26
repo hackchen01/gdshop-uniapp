@@ -273,10 +273,13 @@
 
 			<u-divider bgColor="f5f5f5" margin-bottom="30" margin-top="30">宝贝详情</u-divider>
 
-			<view class="goods-content-box">
+			<view class="goods-content-box" v-if="goodsContentIsLoading && goodsContent.length>0">
 				 <mp-html :content="goodsContent" :lazy-load="true">
-					 <u-loadmore :status="'loading'" />
+					 <u-loadmore v-if="!goodsContentIsLoading" :status="'loading'" />
 				 </mp-html>
+			</view>
+			<view class="goods-content-box" v-else>
+				 <u-empty text="宝贝详情为空" mode="data"></u-empty>
 			</view>
 
 			<u-gap height="180" bg-color="#f5f5f5"></u-gap>
@@ -427,8 +430,7 @@
 			console.log(this.$Route.query)
 			that = this
 			if (that.$Route.query.id){
-				// that.goodsId = that.$Route.query.id
-				that.goodsId = 46
+				that.goodsId = that.$Route.query.id
 				that.getGoodsInfo(that.goodsId)
 			}
 		},
@@ -587,7 +589,16 @@
 					selectShop : selectShop,
 					success : function(res){
 						// 实际业务时,请替换自己的加入购物车逻辑
-						that.toast(res.msg);
+						that.$api.cart.save({
+							goods_id:that.goodsId,
+							goods_num:selectShop.buy_num,
+							goods_option_id:selectShop.id,
+						}).then(res => {
+							that.closeSku()
+							that.toast('加入购物车成功')
+						}).catch(err => {
+							that.toast(err.message)
+						})
 					}
 				});
 			},
@@ -605,8 +616,8 @@
 							name:'order/create',
 							params:{
 								goods_id:that.goodsId,
-								buy_num:selectShop.buy_num,
-								option_id:selectShop.id,
+								goods_num:selectShop.buy_num,
+								goods_option_id:selectShop.id,
 							},
 						})
 					}
@@ -624,6 +635,7 @@
 					// console.log(goodsInfo)
 					//let goodsInfo = goodsData2;   // 无sku的商品
 					resolve(that.goodsInfo);
+					// resolve(goodsData1);
 					/*
 					that.$api.goods.details({id:that.goodsId}).then(res => {
 						resolve(res);
