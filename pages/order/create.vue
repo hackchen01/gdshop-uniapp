@@ -6,14 +6,14 @@
 				<view class="address-info">
 					<view class="address-selected" v-if="addressInfo.id">
 						<view class="top">
-							<view class="name">{{ addressInfo.name }}</view>
-							<view class="phone">{{ addressInfo.phone }}</view>
+							<view class="name">{{ addressInfo.addressee }}</view>
+							<view class="phone">{{ addressInfo.mobile }}</view>
 							<view class="tag">
 								<text v-for="(item, index) in addressInfo.tag" :key="index" :class="{red:item.tagText=='默认'}">{{ item.tagText }}</text>
 							</view>
 						</view>
 						<view class="bottom">
-						{{ addressInfo.site }}
+						{{ getAddressText(addressInfo) }}
 						</view>
 					</view>
 					<view class="address-not" v-else>
@@ -234,7 +234,22 @@
 			},
 			gotoUseInvoice(){
 				this.$myRouter.push({name:'order/use_invoice',params:{good_ids:[1,2]}})
-			}
+			},
+			getAddressText(e){
+				let texts = []
+				let xunhuanNames = [
+					'province',
+					'city',
+					'area',
+					'street',
+				]
+				for	(var k in xunhuanNames){
+					if('不显示' != e[xunhuanNames[k]]){
+						texts.push(e[xunhuanNames[k]])
+					}
+				}
+				return texts.join('-')
+			},
 		}
 	}
 </script>
