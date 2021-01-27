@@ -32,29 +32,29 @@
 				<view class="top">
 					<view class="left">
 						<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
-						<view class="store">{{ res.store }}</view>
+						<view class="store">{{ res.store_name }}</view>
 					</view>
 				</view>
-				<view class="item" v-for="(item, index) in res.goodsList" :key="index">
-					<view class="left"><image :src="item.goodsUrl" mode="aspectFill"></image></view>
+				<view class="item" v-for="(item, index) in res.goodss" :key="index">
+					<view class="left"><image :src="item.cover_photo" mode="aspectFill"></image></view>
 					<view class="content">
-						<view class="title u-line-2">{{ item.title }}</view>
-						<view class="type">{{ item.type }}</view>
-						<view class="delivery-time">发货时间 {{ item.deliveryTime }}</view>
+						<view class="title u-line-2">{{ item.goods_name }}</view>
+						<view class="type">{{ item.options[0].sku_name }}</view>
+						<!-- <view class="delivery-time">发货时间 {{ item.deliveryTime }}</view> -->
 					</view>
 					<view class="right">
 						<view class="price">
-							￥{{ priceInt(item.price) }}
-							<text class="decimal">.{{ priceDecimal(item.price) }}</text>
+							￥{{ priceInt((item.options[0].price / 100)) }}
+							<text class="decimal">.{{ priceDecimal((item.options[0].price / 100)) }}</text>
 						</view>
-						<view class="number">x{{ item.number }}</view>
+						<view class="number">x{{ item.buy_num }}</view>
 					</view>
 				</view>
 				<view class="total">
-					共{{ totalNum(res.goodsList) }}件 小计:
+					共{{ totalNum(res.goodss) }}件 小计:
 					<text class="total-price">
-						￥{{ priceInt(totalPrice(res.goodsList)) }}.
-						<text class="decimal">{{ priceDecimal(totalPrice(res.goodsList)) }}</text>
+						￥{{ priceInt(totalPrice(res.goodss)) }}.
+						<text class="decimal">{{ priceDecimal(totalPrice(res.goodss)) }}</text>
 					</text>
 				</view>
 			</view>
@@ -64,12 +64,12 @@
 			<u-cell-group class="group">
 				<u-cell-item title="商品总额" :arrow="false" hover-class="cell-hover-class">
 					<view slot="right-icon" class="">
-						￥1192.00
+						￥{{goodsTotalPrice(100)}}
 					</view>
 				</u-cell-item>
 				<u-cell-item title="运费" :arrow="false" hover-class="cell-hover-class">
 					<view slot="right-icon" class="">
-						￥0.00
+						￥{{freight}}
 					</view>
 				</u-cell-item>
 				<u-cell-item @click="gotoUseCoupon">
@@ -93,7 +93,7 @@
 				</u-cell-item>
 				<u-cell-item :arrow="false" hover-class="cell-hover-class">
 					<view slot="right-icon" class="">
-						合计：<text class="price">￥1192.00</text>
+						合计：<text class="price">￥{{payable(100)}}</text>
 					</view>
 				</u-cell-item>
 			</u-cell-group>
@@ -102,8 +102,8 @@
 		<view class="order-create-tabbar-area-bottom"></view>
 		<view class="order-create-tabbar">
 			<view class="left">
-				<text>共<text class="goods-num">2</text>件</text>,
-				<text>应付:<text class="price">￥1192.00</text></text>
+				<text>共<text class="goods-num">{{goodsTotalNum()}}</text>件</text>,
+				<text>应付:<text class="price">￥{{payable(100)}}</text></text>
 			</view>
 			<view class="right">
 				<u-button type="error" size="medium" shape="circle"
@@ -143,55 +143,9 @@
 				addressInfo: {},
 				couponList: [],
 				selectCoupons: [],
+				freight:0,
 				submitBtnLoading: false,
-				orderList: [
-					{
-						id: 1,
-						store: '商城',
-						deal: '交易成功',
-						goodsList: [
-							{
-								goodsUrl: '//img13.360buyimg.com/n7/jfs/t1/103005/7/17719/314825/5e8c19faEb7eed50d/5b81ae4b2f7f3bb7.jpg',
-								title: '【冬日限定】现货 原创jk制服女2020冬装新款小清新宽松软糯毛衣外套女开衫短款百搭日系甜美风',
-								type: '灰色;M',
-								deliveryTime: '付款后30天内发货',
-								price: '348.58',
-								number: 2
-							},
-							{
-								goodsUrl: '//img12.360buyimg.com/n7/jfs/t1/102191/19/9072/330688/5e0af7cfE17698872/c91c00d713bf729a.jpg',
-								title: '【葡萄藤】现货 小清新学院风制服格裙百褶裙女短款百搭日系甜美风原创jk制服女2020新款',
-								type: '45cm;S',
-								deliveryTime: '付款后30天内发货',
-								price: '135.00',
-								number: 1
-							}
-						]
-					},
-					{
-						id: 2,
-						store: '个人店',
-						deal: '交易成功',
-						goodsList: [
-							{
-								goodsUrl: '//img13.360buyimg.com/n7/jfs/t1/103005/7/17719/314825/5e8c19faEb7eed50d/5b81ae4b2f7f3bb7.jpg',
-								title: '【冬日限定】现货 原创jk制服女2020冬装新款小清新宽松软糯毛衣外套女开衫短款百搭日系甜美风',
-								type: '灰色;M',
-								deliveryTime: '付款后30天内发货',
-								price: '348.58',
-								number: 2
-							},
-							{
-								goodsUrl: '//img12.360buyimg.com/n7/jfs/t1/102191/19/9072/330688/5e0af7cfE17698872/c91c00d713bf729a.jpg',
-								title: '【葡萄藤】现货 小清新学院风制服格裙百褶裙女短款百搭日系甜美风原创jk制服女2020新款',
-								type: '45cm;S',
-								deliveryTime: '付款后30天内发货',
-								price: '135.00',
-								number: 1
-							}
-						]
-					},
-				]
+				orderList: []
 			}
 		},
 		onLoad() {
@@ -237,36 +191,84 @@
 				this.getCreateDataByGoodsId()
 			},
 			getCreateDataByGoodsId(){
+				const that = this
 				this.$api.order.create(this.queryData).then(res => {
 					console.log(res)
+					that.orderList = res.order_list
+					that.freight = res.freight
+				}).catch(err => {
+					uni.showModal({
+						content:err.message,
+						showCancel:false,
+						success:function(res){
+							that.$myRouter.back()
+						}
+					})
 				})
 			},
 			getCreateDataByCart(){
 				
 			},
-			// 总价
+			// 订单商品总计 - 数量
+			goodsTotalNum(){ 
+				let num = 0;
+				this.orderList.map(order => {
+					order.goodss.map(item => {
+						num += item.buy_num
+					})
+				})
+				return num;
+			},
+			// 订单商品总计 - 价格
+			goodsTotalPrice(xiaoshu = 100){ 
+				let price = 0;
+				this.orderList.map(order => {
+					order.goodss.map(item => {
+						price += item.options[0].price
+					})
+				})
+				return (price / xiaoshu).toFixed(2);
+			},
+			// 应付
+			payable(xiaoshu = 100){ 
+				let totalPrice = this.goodsTotalPrice(1)
+				// 要减掉优惠券等等
+				return (totalPrice / xiaoshu).toFixed(2);
+			},
+			// 商店合计
 			totalPrice(item) {
 				let price = 0;
 				item.map(val => {
-					price += parseFloat(val.price);
+					price += parseFloat(val.options[0].price);
 				});
-				return price.toFixed(2);
+				return (price / 100).toFixed(2);
 			},
-			// 总件数
+			// 商店合计总件数
 			totalNum(item) {
 				let num = 0;
 				item.map(val => {
-					num += val.number;
+					num += val.buy_num;
 				});
 				return num;
 			},
 			submitOrder(){
 				let that = this
+				// 检测是否选择地址
+				if(!(that.addressInfo && that.addressInfo.id)){
+					that.$u.toast('请选择收件地址')
+					return
+				}
 				that.submitBtnLoading = true
 				setTimeout(function() {
 					that.submitBtnLoading = false
-				}, 2000);
-				this.$myRouter.push({name:'order/pay',params:{id:1}})
+				}, 20000);
+				that.$api.order.submit().then(res => {
+					that.submitBtnLoading = false
+					that.$myRouter.push({name:'order/pay',params:{id:1}})
+				}).catch(err => {
+					that.submitBtnLoading = false
+					that.$u.toast(err.message)
+				})
 			},
 			gotoUseCoupon(){
 				this.$myRouter.push({name:'order/use_coupon',params:{good_ids:[1,2]}})
