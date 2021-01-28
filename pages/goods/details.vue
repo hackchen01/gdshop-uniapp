@@ -75,9 +75,16 @@
 								<text class="line-through">￥{{getMoneyByMinute(goodsInfo.market_price)}}</text>
 							</view>
 						</view>
-						<view class="collection" @tap="collecting">
-							<u-icon name="heart" size="46"></u-icon>
-							<view class="scale-collection">收藏</view>
+						<view class="collection" @tap="goodsCollection">
+							<template v-if="goodsInfo.is_collection">
+								<u-icon name="heart-fill" size="46" 
+								color="#F00"></u-icon>
+								<view class="scale-collection" style="color:#F00;">收藏</view>
+							</template>
+							<template v-else>
+								<u-icon name="heart" size="46"></u-icon>
+								<view class="scale-collection">收藏</view>
+							</template>
 						</view>
 					</view>
 					<view class="goods-name">
@@ -654,6 +661,20 @@
 			}
 			,gotoCouponCenter(){
 				this.$myRouter.push({name:'coupon/index',params:{goods_id:1}})
+			},
+			goodsCollection(){
+				const that = this
+				that.$api.goods.collection({id:that.goodsId})
+				.then(res => {
+					if(that.goodsInfo.is_collection){
+						that.$u.toast('取消收藏成功')
+					}
+					else{
+						that.$u.toast('收藏成功')
+					}
+					that.goodsInfo.is_collection = !that.goodsInfo.is_collection
+					
+				})
 			}
 		},
 		onPageScroll(e) {

@@ -20,6 +20,13 @@ export default ( http ) => ({
 			params: query
 		})
 	},
+	collection (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/goods/collection',
+			params: query
+		})
+	},
 	test () {
 		return 'test'
 	}
