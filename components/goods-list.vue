@@ -3,7 +3,7 @@
 		<view class="goods-item" v-for="(item, index) in goodsList" :key="index"
 		@click="gotoGoodsDetails(item.id)">
 			<view class="goods-item-img">
-				<u-image :src="'http://woyinshua-order-img.gida.cn/mockdata/images/' + item.img + '.jpg'" class="img"
+				<u-image :src="item.cover_photo" class="img"
 				mode="widthFix">
 					<u-loading slot="loading"></u-loading>
 					<view slot="error" class="error-box">
@@ -12,13 +12,13 @@
 				</u-image>
 			</view>
 			<view class="goods-item-content">
-				<view class="title">{{ item.name }}</view>
+				<view class="title">{{ item.goods_name }}</view>
 				<view class="bottom">
 					<view class="price">
-						<text class="sale-price">￥{{ item.sale }}</text>
-						<text class="factory-price">￥{{ item.factory }}</text>
+						<text class="sale-price">￥{{ getPrice(item.sell_price) }}</text>
+						<text class="factory-price">￥{{ getPrice(item.market_price) }}</text>
 					</view>
-					<view class="buy-num">{{ item.payNum }}人付款</view>
+					<view class="buy-num">{{ (item.sales+item.virtual_sales) }}人付款</view>
 				</view>
 			</view>
 		</view>
@@ -45,6 +45,9 @@
 			gotoGoodsDetails(_goodsId){
 				this.$myRouter.push({name:'goods/details',params:{id:_goodsId}})
 			},
+			getPrice(_price){
+				return (_price / 100).toFixed(2);
+			}
 		}
 	}
 </script>

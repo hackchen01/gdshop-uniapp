@@ -75,8 +75,13 @@
 			</view>
 			<view class="goods-box">
 				<goods-list :goodsList="productList"></goods-list>
+				<view style="padding: 30rpx;">
+					<u-loadmore :status="hotGoodsStatus" />
+				</view>
 			</view>
 		</view>
+		
+		<u-back-top :scroll-top="scrollTop"></u-back-top>
 	</view>
 </template>
 
@@ -94,6 +99,9 @@
 		},
 		data() {
 			return {
+				scrollTop:0,
+				hotGoodsPage:0,
+				hotGoodsStatus:'loadmore',
 				iconGroupCurrent:0,
 				iconGroup:{
 					isShowBorder:0,
@@ -230,94 +238,39 @@
 					'一片冰心在玉壶'
 				],
 				keyword: '',
-				productList: [
-					{
-						id: 1,
-						img: 11111111,
-						name: '欧莱雅（LOREAL）奇焕光彩粉嫩透亮修颜霜 30ml（欧莱雅彩妆 BB霜 粉BB 遮瑕疵 隔离）',
-						sale: 599,
-						factory: 899,
-						payNum: 2342
-					},
-					{
-						id: 2,
-						img: 2,
-						name: '德国DMK进口牛奶  欧德堡（Oldenburger）超高温处理全脂纯牛奶1L*12盒',
-						sale: 29,
-						factory: 69,
-						payNum: 999
-					},
-					{
-						id: 3,
-						img: 3,
-						name: '【第2支1元】柔色尽情丝柔口红唇膏女士不易掉色保湿滋润防水 珊瑚红',
-						sale: 299,
-						factory: 699,
-						payNum: 666
-					},
-					{
-						id: 4,
-						img: 4,
-						name: '百雀羚套装女补水保湿护肤品',
-						sale: 1599,
-						factory: 2899,
-						payNum: 236
-					},
-					{
-						id: 5,
-						img: 5,
-						name: '百草味 肉干肉脯 休闲零食 靖江精制猪肉脯200g/袋',
-						sale: 599,
-						factory: 899,
-						payNum: 2399
-					},
-					{
-						id: 6,
-						img: 6,
-						name: '短袖睡衣女夏季薄款休闲家居服短裤套装女可爱韩版清新学生两件套 短袖粉色长颈鹿 M码75-95斤',
-						sale: 599,
-						factory: 899,
-						payNum: 2399
-					},
-					{
-						id: 1,
-						img: 1,
-						name: '欧莱雅（LOREAL）奇焕光彩粉嫩透亮修颜霜',
-						sale: 599,
-						factory: 899,
-						payNum: 2342
-					},
-					{
-						id: 2,
-						img: 2,
-						name: '德国DMK进口牛奶',
-						sale: 29,
-						factory: 69,
-						payNum: 999
-					},
-					{
-						id: 3,
-						img: 3,
-						name: '【第2支1元】柔色尽情丝柔口红唇膏女士不易掉色保湿滋润防水 珊瑚红',
-						sale: 299,
-						factory: 699,
-						payNum: 666
-					},
-					{
-						id: 4,
-						img: 4,
-						name: '百雀羚套装女补水保湿护肤品',
-						sale: 1599,
-						factory: 2899,
-						payNum: 236
-					}
-				],
+				productList: [],
 			}
 		},
 		onLoad() {
-
+			this.initData()
+		},
+		onReachBottom(){
+			if (this.hotGoodsStatus != 'nomore'){
+				this.getHotGoods()
+			}
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop;
 		},
 		methods:{
+			initData(){
+				let that = this
+				that.getHotGoods()
+			},
+			getHotGoods(){
+				let that = this
+				that.hotGoodsPage++
+				that.hotGoodsStatus = 'loading'
+				that.$api.goods.list({page:that.hotGoodsPage}).then(res => {
+					that.productList = that.productList.concat(res.list)
+					if (res.page_info.has_more) {
+						that.hotGoodsStatus = 'loadmore'
+					}
+					else{
+						that.hotGoodsStatus = 'nomore'
+					}
+				})
+			},
 			goSearch(){
 				this.$myRouter.push({name:'goods/search'})
 			},
