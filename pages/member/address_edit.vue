@@ -15,8 +15,11 @@
 			</view>
 			<view class="item" @tap="showRegionPicker">
 				<view class="left">所在地区</view>
-				<view class="">
-					{{address}}
+				<view class="region-picker">
+					<view class="">
+						{{address}}
+					</view>
+					<u-icon name="arrow-right"></u-icon>
 				</view>
 			</view>
 			<view class="item address">
@@ -203,6 +206,11 @@ export default {
 			}
 			input {
 				text-align: left;
+			}
+			.region-picker{
+				display: flex;
+				justify-content: space-between;
+				width: 75%;
 			}
 		}
 		
