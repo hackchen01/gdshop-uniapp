@@ -149,7 +149,6 @@
 			}
 		},
 		onLoad() {
-			console.log(this.$Route.query)
 			if(!this.checkQueryData(this.$Route.query)){
 				return
 			}
@@ -157,11 +156,9 @@
 		},
 		methods:{
 			selectAddress(){
-				// this.addressInfo = !this.addressInfo
 				let that = this
 				// 选择地址监听
 				uni.$once('order-create-select-address',function(data){
-					console.log(data)
 					that.addressInfo = data
 				})
 				
@@ -262,9 +259,24 @@
 				setTimeout(function() {
 					that.submitBtnLoading = false
 				}, 20000);
-				that.$api.order.submit().then(res => {
+				let goodsList = []
+				that.orderList.map(order => {
+					order.goodss.map(item => {
+						goodsList.push({
+							goods_id:item.id,
+							goods_option_id:item.options[0].id,
+							goods_num:item.buy_num,
+						})
+					})
+				})
+				let submitData = {
+					store_id:0,
+					address_id:that.addressInfo.id,
+					goods_list:goodsList
+				}
+				that.$api.order.submit(submitData).then(res => {
 					that.submitBtnLoading = false
-					that.$myRouter.push({name:'order/pay',params:{id:1}})
+					that.$myRouter.push({name:'order/pay',params:{id:res.order_id}})
 				}).catch(err => {
 					that.submitBtnLoading = false
 					that.$u.toast(err.message)
