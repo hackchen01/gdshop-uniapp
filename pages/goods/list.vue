@@ -23,7 +23,11 @@
 		 <u-gap height="90" bg-color="#f5f5f5"></u-gap>
 		<view class="goods-con">
 			<goods-list :goodsList="productList"></goods-list>
+			<view style="padding: 30rpx;">
+				<u-loadmore :status="goodsStatus" />
+			</view>
 		</view>
+		<u-back-top :scroll-top="scrollTop"></u-back-top>
 	</view>
 </template>
 
@@ -47,172 +51,119 @@
 				}
 			}
 		},
-			data() {
-				return {
-					filterData: [
-						{
-							"name":"分类",
-							"type":"hierarchy",
-							'submenu':[
-								{
-									"name":"次",
-									"value":"1-1",
-									'submenu': [
-										{
-											"name":"次2",
-											"value":"1-2",
-										},
-										{
-											"name":"2次2",
-											"value":"1-3",
-										},
-									]
-								},
-								{
-									"name":"次22",
-									"value":"1-4",
-									'submenu': [
-										{
-											"name":"次22",
-											"value":"1-5",
-										}
-									]
-								},
+		onLoad() {
+			this.initData()
+		},
+		onPageScroll(e) {
+			this.scrollTop = e.scrollTop;
+		},
+		onReachBottom(){
+			if (this.goodsStatus != 'nomore'){
+				this.initData()
+			}
+		},
+		data() {
+			return {
+				scrollTop:0,
+				goodsPage:0,
+				goodsStatus:'loadmore',
+				filterData: [
+					{
+						"name":"分类",
+						"type":"hierarchy",
+						'submenu':[
+							{
+								"name":"次",
+								"value":"1-1",
+								'submenu': [
+									{
+										"name":"次2",
+										"value":"1-2",
+									},
+									{
+										"name":"2次2",
+										"value":"1-3",
+									},
+								]
+							},
+							{
+								"name":"次22",
+								"value":"1-4",
+								'submenu': [
+									{
+										"name":"次22",
+										"value":"1-5",
+									}
+								]
+							},
 
-							],
-						},
-						{
-							"name":"",
-							"type":"hierarchy",
-							'submenu':[
-								{
-									"name":"综合推荐",
-									"value":"2-1",
-								},
-								{
-									"name":"新品",
-									"value":"2-2",
-								},
-								{
-									"name":"评论数",
-									"value":"2-3",
-								},
-								{
-									"name":"价格高到低",
-									"value":"2-4",
-								},
-								{
-									"name":"价格低到高",
-									"value":"2-5",
-								}
-							],
-						},
-					],
-					defaultSelected: [
-						[null,null],
-						[0],
-					],
-					productList: [
-						{
-							id: 1,
-							img: 11111111,
-							name: '欧莱雅（LOREAL）奇焕光彩粉嫩透亮修颜霜 30ml（欧莱雅彩妆 BB霜 粉BB 遮瑕疵 隔离）',
-							sale: 599,
-							factory: 899,
-							payNum: 2342
-						},
-						{
-							id: 2,
-							img: 2,
-							name: '德国DMK进口牛奶  欧德堡（Oldenburger）超高温处理全脂纯牛奶1L*12盒',
-							sale: 29,
-							factory: 69,
-							payNum: 999
-						},
-						{
-							id: 3,
-							img: 3,
-							name: '【第2支1元】柔色尽情丝柔口红唇膏女士不易掉色保湿滋润防水 珊瑚红',
-							sale: 299,
-							factory: 699,
-							payNum: 666
-						},
-						{
-							id: 4,
-							img: 4,
-							name: '百雀羚套装女补水保湿护肤品',
-							sale: 1599,
-							factory: 2899,
-							payNum: 236
-						},
-						{
-							id: 5,
-							img: 5,
-							name: '百草味 肉干肉脯 休闲零食 靖江精制猪肉脯200g/袋',
-							sale: 599,
-							factory: 899,
-							payNum: 2399
-						},
-						{
-							id: 6,
-							img: 6,
-							name: '短袖睡衣女夏季薄款休闲家居服短裤套装女可爱韩版清新学生两件套 短袖粉色长颈鹿 M码75-95斤',
-							sale: 599,
-							factory: 899,
-							payNum: 2399
-						},
-						{
-							id: 1,
-							img: 1,
-							name: '欧莱雅（LOREAL）奇焕光彩粉嫩透亮修颜霜',
-							sale: 599,
-							factory: 899,
-							payNum: 2342
-						},
-						{
-							id: 2,
-							img: 2,
-							name: '德国DMK进口牛奶',
-							sale: 29,
-							factory: 69,
-							payNum: 999
-						},
-						{
-							id: 3,
-							img: 3,
-							name: '【第2支1元】柔色尽情丝柔口红唇膏女士不易掉色保湿滋润防水 珊瑚红',
-							sale: 299,
-							factory: 699,
-							payNum: 666
-						},
-						{
-							id: 4,
-							img: 4,
-							name: '百雀羚套装女补水保湿护肤品',
-							sale: 1599,
-							factory: 2899,
-							payNum: 236
-						}
-					],
+						],
+					},
+					{
+						"name":"",
+						"type":"hierarchy",
+						'submenu':[
+							{
+								"name":"综合推荐",
+								"value":"2-1",
+							},
+							{
+								"name":"新品",
+								"value":"2-2",
+							},
+							{
+								"name":"评论数",
+								"value":"2-3",
+							},
+							{
+								"name":"价格高到低",
+								"value":"2-4",
+							},
+							{
+								"name":"价格低到高",
+								"value":"2-5",
+							}
+						],
+					},
+				],
+				defaultSelected: [
+					[null,null],
+					[0],
+				],
+				productList: [],
+			}
+		},
+		methods:{
+			dropdownIsChange(_newIndex){
+				return JSON.stringify(_newIndex) != JSON.stringify(this.defaultSelected)
+			},
+			dropdownConfirm(_data){
+				if(this.dropdownIsChange(_data.index)){
+					console.log('变化了')
 				}
 			},
-			methods:{
-				dropdownIsChange(_newIndex){
-					return JSON.stringify(_newIndex) != JSON.stringify(this.defaultSelected)
-				},
-				dropdownConfirm(_data){
-					if(this.dropdownIsChange(_data.index)){
-						console.log('变化了')
+			goBack(){
+				this.$myRouter.back()
+			},
+			goSearch(){
+				this.$myRouter.push({name:'goods/search'})
+			},
+			initData(){
+				let that = this
+				that.goodsPage++
+				that.goodsStatus = 'loading'
+				that.$api.goods.list({page:that.goodsPage}).then(res => {
+					that.productList = that.productList.concat(res.list)
+					if (res.page_info.has_more) {
+						that.goodsStatus = 'loadmore'
 					}
-				},
-				goBack(){
-					this.$myRouter.back()
-				},
-				goSearch(){
-					this.$myRouter.push({name:'goods/search'})
-				}
+					else{
+						that.goodsStatus = 'nomore'
+					}
+				})
 			}
 		}
+	}
 </script>
 
 <style scoped lang="scss">
