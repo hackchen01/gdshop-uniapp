@@ -110,6 +110,7 @@
 		},
 		data() {
 			return {
+				saveLock:true, // 锁定保存
 				cartList: [],
 				totalMoney:0,
 				testNum:false,
@@ -144,6 +145,10 @@
 						return item
 					})
 					that.calcIsSelectAll()
+					// 加载数据成功后，延迟一点开启按钮操作
+					setTimeout(() => {
+						that.saveLock = false
+					},500)
 				})
 				.catch(err => {
 					if (err.code === 10003){
@@ -175,19 +180,22 @@
 					goods_num:_item['total'],
 					is_selected:_item['checked'],
 				}).then(res => {
-					console.log(res)
+					// console.log(res)
 				})
 				.catch(err => {
-					console.log(res)
+					// console.log(res)
 				})
 			},
 			cartFormatPrice(_price){
 				return _.formatNumber((_price / 100),'0.00');
 			},
 			uNumberBoxChange(_data){
-				//console.log(_data)
+				// console.log('uNumberBoxChange')
 				this.cartList[_data['index']]['total'] = _data['value']
-				this.saveChangeCart(this.cartList[_data['index']])
+				// 锁定时不触发
+				if (this.saveLock === false){
+					this.saveChangeCart(this.cartList[_data['index']])
+				}
 			},
 			selectBtnClick(_item){
 				_item.checked = !_item.checked
@@ -231,9 +239,17 @@
 					return
 				}
 				that.isLoading = true
+				// 可以先检测，目前直接跳转
 				setTimeout(function() {
 					that.isLoading = false
 				}, 3000);
+				let cartIds = []
+				this.cartList.map((val, idx) => {
+					if (val.checked){
+						cartIds.push(val.id)
+					}
+				})
+				this.$myRouter.push({name:'order/create', params: { cart_ids: cartIds }})
 			}
 		}
 	}
