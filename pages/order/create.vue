@@ -191,8 +191,11 @@
 				const that = this
 				this.$api.order.create(this.queryData).then(res => {
 					console.log(res)
-					that.orderList = res.order_list
-					that.freight = res.freight
+					that.orderList = res.order_info.order_list
+					that.freight = res.order_info.freight
+					if (res.address_info){
+						that.addressInfo = res.address_info
+					}
 				}).catch(err => {
 					uni.showModal({
 						content:err.message,
