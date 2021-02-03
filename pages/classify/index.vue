@@ -20,9 +20,9 @@
 							<text>{{currentItem.name}}</text>
 						</view>
 						<view class="item-container">
-							<view class="thumb-box" v-for="(item1, index1) in currentItem.foods" 
-							:key="index1" @click="gotoGoodsList(1)">
-								<image class="item-menu-image" :src="item1.icon" mode=""></image>
+							<view class="thumb-box" v-for="(item1, index1) in currentItem.subs" 
+							:key="index1" @click="gotoGoodsList(item1.id)">
+								<image class="item-menu-image" :src="item1.cover" mode=""></image>
 								<view class="item-menu-name">{{item1.name}}</view>
 							</view>
 						</view>
@@ -54,10 +54,16 @@
 		},
 		methods: {
 			init(){
-				this.getCurrentItemData();
+				this.getData()
+				
 			},
-			getImg() {
-				return Math.floor(Math.random() * 35);
+			getData(){
+				const that = this
+				that.$api.classify.list().then(res => {
+					console.log(res)
+					that.tabbar = res
+					that.getCurrentItemData()
+				})
 			},
 			getCurrentItemData(){
 				this.currentItem = this.tabbar[this.current]
