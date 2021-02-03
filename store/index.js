@@ -32,8 +32,12 @@ const actions = {
 	setMemberLogin(context,payload){
 		return new Promise((resolve,reject)=>{
 			context.commit('setMemberLogin',payload)
+			context.dispatch('getCartCount')
+		})
+	},
+	getCartCount(context,payload){
+		return new Promise((resolve,reject)=>{
 			api.cart.count().then(res => {
-				console.log(res)
 				uni.$emit('CART_COUNT_CHANGE',res)
 				resolve()
 			})

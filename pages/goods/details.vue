@@ -607,6 +607,7 @@
 						}).then(res => {
 							that.closeSku()
 							that.toast('加入购物车成功')
+							uni.$emit('CART_COUNT_CHANGE',res)
 						}).catch(err => {
 							that.toast(err.message)
 						})

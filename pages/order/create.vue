@@ -139,6 +139,7 @@
 					goods_id:'',
 					goods_num:'',
 					goods_option_id:'',
+					cart_ids:[]
 				},
 				addressInfo: {},
 				couponList: [],
@@ -149,10 +150,7 @@
 			}
 		},
 		onLoad() {
-			if(!this.checkQueryData(this.$Route.query)){
-				return
-			}
-			this.getCreateData()
+			this.getCreateData(this.$Route.query)
 		},
 		methods:{
 			selectAddress(){
@@ -165,6 +163,12 @@
 				this.$myRouter.push({name:'order/select_address',params:{selected:this.addressInfo.id}})
 			},
 			checkQueryData(_query){
+				if (_query.cart_ids){
+					
+				}
+				else{
+					
+				}
 				if(!_query.goods_id){
 					this.$u.toast('goods_id 不能为空')
 					return false
@@ -181,11 +185,19 @@
 				this.queryData.goods_id = _query.goods_id
 				this.queryData.goods_num = _query.goods_num
 				this.queryData.goods_option_id = _query.goods_option_id
-				
 				return true
 			},
-			getCreateData(){
-				this.getCreateDataByGoodsId()
+			getCreateData(_query){
+				if(_query.cart_ids){
+					this.queryData.cart_ids = _query.cart_ids
+					this.getCreateDataByGoodsId()
+				}
+				else{
+					if(!this.checkQueryData(this.$Route.query)){
+						return
+					}
+					this.getCreateDataByGoodsId()
+				}
 			},
 			getCreateDataByGoodsId(){
 				const that = this
@@ -224,7 +236,7 @@
 				let price = 0;
 				this.orderList.map(order => {
 					order.goodss.map(item => {
-						price += item.options[0].price
+						price += item.options[0].price * item.buy_num
 					})
 				})
 				return (price / xiaoshu).toFixed(2);
@@ -239,7 +251,7 @@
 			totalPrice(item) {
 				let price = 0;
 				item.map(val => {
-					price += parseFloat(val.options[0].price);
+					price += parseFloat(val.options[0].price * val.buy_num);
 				});
 				return (price / 100).toFixed(2);
 			},
@@ -275,7 +287,8 @@
 				let submitData = {
 					store_id:0,
 					address_id:that.addressInfo.id,
-					goods_list:goodsList
+					goods_list:goodsList,
+					cart_ids:that.queryData.cart_ids
 				}
 				that.$api.order.submit(submitData).then(res => {
 					that.submitBtnLoading = false

@@ -14,9 +14,21 @@ const router = new Router({
     routes: ROUTES //路由表
 });
 
+const updateCartCountRouters = [
+	'index/index',
+	'classify/index',
+	'member/index',
+]
+
 //全局路由前置守卫
 router.beforeEach((to, from, next) => {
 	if(to.guest === true){
+		if(store.state.memberToken.length > 0){
+			// 已登录，可尝试获取购物车数量
+			if (updateCartCountRouters.includes(to.name)){
+				store.dispatch('getCartCount')
+			}
+		}
 		next()
 	}
 	else {
@@ -28,6 +40,10 @@ router.beforeEach((to, from, next) => {
 			});
 		}
 		else{
+			// 已登录，可尝试获取购物车数量
+			if (updateCartCountRouters.includes(to.name)){
+				store.dispatch('getCartCount')
+			}
 			next()
 		}
 	}

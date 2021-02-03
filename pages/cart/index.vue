@@ -28,14 +28,14 @@
 					></u-checkbox>
 				</view>
 				<view class="goods-box">
-					<view class="pictrue" @click="gotoGoodsDetails(1)">
+					<view class="pictrue" @click="gotoGoodsDetails(item.goods_id)">
 						<image class="img" :src="item.goods_cover" mode=""></image>
 					</view>
 					<view class="info">
-						<view class="goods-name" @click="gotoGoodsDetails(1)">
+						<view class="goods-name" @click="gotoGoodsDetails(item.goods_id)">
 							{{item.goods_name}}
 						</view>
-						<view class="specs" @click="gotoGoodsDetails(1)">
+						<view class="specs" @click="gotoGoodsDetails(item.goods_id)">
 							规格：{{item.option_name}}
 						</view>
 						<view class="money">
@@ -106,6 +106,9 @@
 			},
 		},
 		onLoad() {
+			
+		},
+		onShow() {
 			this.getDataList()
 		},
 		data() {
