@@ -190,11 +190,14 @@
 				return _.formatNumber((_price / 100),'0.00');
 			},
 			uNumberBoxChange(_data){
+				const that = this
 				// console.log('uNumberBoxChange')
 				this.cartList[_data['index']]['total'] = _data['value']
 				// 锁定时不触发
 				if (this.saveLock === false){
-					this.saveChangeCart(this.cartList[_data['index']])
+					that.$u.debounce(function(){
+						that.saveChangeCart(that.cartList[_data['index']])
+					},500)
 				}
 			},
 			selectBtnClick(_item){
