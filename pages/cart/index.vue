@@ -138,17 +138,29 @@
 				let that = this
 				this.$api.cart.mycarts().then(res => {
 					that.isLogin = true
-					that.cartList = res.list
-					setTimeout(function(){
-						// 延迟设置
-						that.isSelectAll = (that.selectOrderCount == that.cartList.length)
-					},100)
+					// 加入左滑属性
+					that.cartList = res.list.map(item => {
+						item.show = false
+						return item
+					})
+					that.calcIsSelectAll()
 				})
 				.catch(err => {
 					if (err.code === 10003){
 						that.isLogin = false
 					}
 				})
+			},
+			calcIsSelectAll(){
+				const that = this
+				uni.$emit('CART_COUNT_CHANGE',this.cartList.length)
+				setTimeout(function(){
+					// 延迟设置，列表长度为 0 不设置
+					if (that.cartList.length < 1){
+						return false
+					}
+					that.isSelectAll = (that.selectOrderCount == that.cartList.length)
+				},100)
 			},
 			gotoLogin(){
 				this.$myRouter.push({name:'index/login'})
@@ -183,10 +195,7 @@
 			},
 			checkboxChange(e) {
 				let that = this
-				setTimeout(function(){
-					// 延迟设置
-					that.isSelectAll = (that.selectOrderCount == that.cartList.length)
-				},100)
+				that.calcIsSelectAll()
 			},
 			claerAllChecked(_checked){
 				this.cartList.map(item => {
@@ -205,14 +214,16 @@
 				})
 			},
 			swipeActionClick(index,btnIndex){
+				this.cartList[index].show = false;
+				const model = this.cartList[index]
+				this.cartList.splice(index, 1);
 				if(btnIndex == 1) {
-					const model = this.cartList[index]
-					this.cartList.splice(index, 1);
 					this.$api.cart.del({id:model.id})
 				} else {
-					this.cartList[index].show = false;
+					this.$api.goods.collection({id:model.goods_id,cart_id:model.id})
 					this.$u.toast(`收藏成功`);
 				}
+				uni.$emit('CART_COUNT_CHANGE',this.cartList.length)
 			},
 			settlement(){
 				let that = this

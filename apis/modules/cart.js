@@ -34,6 +34,13 @@ export default ( http ) => ({
 			params: query
 		})
 	},
+	count (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/cart/count',
+			params: query
+		})
+	},
 	test () {
 		return 'test'
 	}

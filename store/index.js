@@ -1,16 +1,21 @@
 import Vue from 'vue'  
 import Vuex from 'vuex'  
 import createPersistedState from 'vuex-persistedstate'
+import api from '@/apis/index'
 // import testModules from './modules/test'
 
 Vue.use(Vuex)  
 
 const state = {  
   favorites: [],  
+  cartCount:0,
   memberToken: "",
   memberInfo:{},
 }
 const mutations = {
+	setCartCount: (state, value) => {
+	  state.cartCount = value;
+	},
 	setUsername: (state, value) => {
 	  state.username = value;
 	},
@@ -22,6 +27,18 @@ const mutations = {
 	  state.memberInfo = {};
 	  state.memberToken = '';
 	},
+}
+const actions = {
+	setMemberLogin(context,payload){
+		return new Promise((resolve,reject)=>{
+			context.commit('setMemberLogin',payload)
+			api.cart.count().then(res => {
+				console.log(res)
+				uni.$emit('CART_COUNT_CHANGE',res)
+				resolve()
+			})
+		})
+	}
 }
 
 let modules = {}
@@ -36,6 +53,7 @@ export default new Vuex.Store({
 		test:testModules
 	},*/
 	modules: modules,
+	actions,
 	state,
 	mutations,
 	plugins: [

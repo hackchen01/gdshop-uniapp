@@ -83,9 +83,9 @@
     "h5" : {
         "template" : "template.h5.html",
         "router" : {
-            "mode" : "history"
+            "mode" : "hash"
         },
-        "title" : "gdbase6商城",
+        "title" : "gdshop商城",
         "optimization" : {
             "treeShaking" : {
                 "enable" : true

@@ -14,6 +14,8 @@ Vue.prototype.$api = Api
 // 引入全局uView
 import uView from 'plugins/uview-ui'
 Vue.use(uView);
+// 注册全局事件
+import globalEvent from './event'
 
 const app = new Vue({
 	Store,

@@ -322,7 +322,7 @@
 						<view class="grid-text">首页</view>
 					</u-grid-item>
 					<u-grid-item :customStyle="customStyle" @click="gotoNavigation('cart')">
-						<u-badge count="9" :offset="[0, 10]"></u-badge>
+						<u-badge :count="cartCount" :offset="[0, 10]"></u-badge>
 						<u-icon name="shopping-cart" :size="40"></u-icon>
 						<view class="grid-text">购物车</view>
 					</u-grid-item>
@@ -342,6 +342,7 @@
 	import vkUGoodsSkuPopup from '@/plugins/vk-u-goods-sku-popup/vk-u-goods-sku-popup'
 	import mpHtml from '@/plugins/mp-html/mp-html'
 	import utils from '@/utils/index'
+	import { mapState } from 'vuex'
 	var that;
 	const goodsData1 = {
 		"_id":"001",
@@ -429,6 +430,9 @@
 			mpHtml
 		},
 		computed:{
+			...mapState([
+				'cartCount',
+			]),
 			isShowHomeBtn(){
 				return true;
 			},

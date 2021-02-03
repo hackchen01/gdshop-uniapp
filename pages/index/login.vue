@@ -103,7 +103,7 @@
 							that.isLoading = false
 							console.log(res)
 							// 设置 store状态
-							that.$store.commit('setMemberLogin',res)
+							that.$store.dispatch('setMemberLogin',res)
 							that.$u.toast('登陆成功')
 							that.$myRouter.back()
 						}).catch(err => {
