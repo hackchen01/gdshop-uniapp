@@ -604,6 +604,7 @@
 							goods_id:that.goodsId,
 							goods_num:selectShop.buy_num,
 							goods_option_id:selectShop.id,
+							is_selected:true,
 						}).then(res => {
 							that.closeSku()
 							that.toast('加入购物车成功')
