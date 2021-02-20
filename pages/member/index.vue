@@ -41,7 +41,7 @@
 				</u-grid-item>
 				<u-grid-item index="coupon">
 					<view class="grid-text">优惠券</view>
-					<view class="grid-text">0</view>
+					<view class="grid-text">{{memberInfo.coupon}}</view>
 				</u-grid-item>
 			</u-grid>
 			<view class="order-wrapper">
@@ -51,27 +51,27 @@
 				<view class="order-bd">
 					<u-grid :col="5" @click="orderListClick">
 						<u-grid-item index="1">
-							<u-badge count="9" :offset="[20, 20]"></u-badge>
+							<u-badge :count="order_num[0]" :offset="[20, 20]"></u-badge>
 							<u-icon name="daifukuan" custom-prefix="g-icon" :size="46"></u-icon>
 							<view class="grid-text">待付款</view>
 						</u-grid-item>
 						<u-grid-item index="2">
-							<u-badge count="9" :offset="[20, 20]"></u-badge>
+							<u-badge :count="order_num[1]" :offset="[20, 20]"></u-badge>
 							<u-icon name="daifahuo" custom-prefix="g-icon" :size="46"></u-icon>
 							<view class="grid-text">待发货</view>
 						</u-grid-item>
 						<u-grid-item index="3">
-							<u-badge count="9" :offset="[20, 20]"></u-badge>
+							<u-badge :count="order_num[2]" :offset="[20, 20]"></u-badge>
 							<u-icon name="daishouhuo" custom-prefix="g-icon" :size="46"></u-icon>
 							<view class="grid-text">待收货</view>
 						</u-grid-item>
 						<u-grid-item index="4">
-							<u-badge count="9" :offset="[20, 20]"></u-badge>
+							<u-badge :count="order_num[3]" :offset="[20, 20]"></u-badge>
 							<u-icon name="daipingjia" custom-prefix="g-icon" :size="46"></u-icon>
 							<view class="grid-text">待评价</view>
 						</u-grid-item>
 						<u-grid-item index="order_service">
-							<u-badge count="9" :offset="[20, 20]"></u-badge>
+							<u-badge :count="order_num[4]" :offset="[20, 20]"></u-badge>
 							<u-icon name="shouhou" custom-prefix="g-icon" :size="46"></u-icon>
 							<view class="grid-text">售后/退款</view>
 						</u-grid-item>
@@ -119,12 +119,20 @@
 					avatar: 'http://woyinshua-order-img.gida.cn//icon/avatar/1.jpg',
 					money_coin:0,
 					integral_coin:0,
+					coupon:0,
 				},
 				memberInfo: {},
 				isLogin: false,
 				isWeixin: true,
 				MyMenus: [],
-				orderMenu: []
+				orderMenu: [],
+				order_num:[
+					0,
+					0,
+					0,
+					0,
+					0,
+				],
 			}
 		},
 		onShow() {
@@ -134,6 +142,7 @@
 			else{
 				this.memberInfo = this.defaultMemberInfo
 			}
+			this.getMemberData()
 		},
 		methods: {
 			getWechatuserinfo() {
@@ -141,6 +150,16 @@
 			},
 			getRoutineUserInfo() {
 
+			},
+			getMemberData(){
+				const that = this
+				that.$api.member.index().then(res => {
+					console.log(res)
+					that.order_num = res.order_num
+					that.memberInfo.money_coin = res.money_coin
+					that.memberInfo.integral_coin = res.integral_coin
+					that.memberInfo.coupon = res.coupon
+				})
 			},
 			goPersonal() {
 				this.$myRouter.push({
