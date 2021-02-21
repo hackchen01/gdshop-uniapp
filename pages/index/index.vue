@@ -47,29 +47,29 @@
 		</view>
 		<view class="picturew-box mode-2">
 			<view class="picturew-item">
-				<u-image src="https://img.100cms.com.cn/images/5/2020/05/IX5nHqhr5zuQGtqR855555gu3xuMnh.png" class="img" 
+				<u-image src="http://gdshop-img.winlo.net//static/picturew-box/01.png" class="img" 
 				mode="widthFix">
 				</u-image>
 			</view>
 			<view class="picturew-item">
-				<u-image src="https://img.100cms.com.cn/images/5/2020/05/HLNB1A2JvnTM11NL9LzjvLvh91vNyv.png" class="img" 
+				<u-image src="http://gdshop-img.winlo.net//static/picturew-box/02.png" class="img" 
 				mode="widthFix">
 				</u-image>
 			</view>
 			<view class="picturew-item">
-				<u-image src="https://img.100cms.com.cn/images/5/2020/05/LGePeSx4EgP3Jtt96PpY5lPPenJP0X.png" class="img" 
+				<u-image src="http://gdshop-img.winlo.net//static/picturew-box/03.png" class="img" 
 				mode="widthFix">
 				</u-image>
 			</view>
 			<view class="picturew-item">
-				<u-image src="https://img.100cms.com.cn/images/5/2020/05/j093332VIKEnoR3Obk3HrKCBMqwVGK.png" class="img" 
+				<u-image src="http://gdshop-img.winlo.net//static/picturew-box/04.png" class="img" 
 				mode="widthFix">
 				</u-image>
 			</view>
 		</view>
 		<view class="you-like-box">
 			<view class="title">
-				<u-image src="https://img.100cms.com.cn/images/5/2020/05/wy10yT1C631tSCeev363e3e3dBb4yC.png" class="img"
+				<u-image src="http://gdshop-img.winlo.net//static/recommend.png" class="img"
 				mode="widthFix">
 				</u-image>
 			</view>
@@ -115,104 +115,104 @@
 							{
 								'index':'integral',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/sGyW55795yQd7158do4vv19WO15Q68.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/01.png',
 							},
 							{
 								'index':'kefu-ermai',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/JfW2WqhRjr9ciwE29hQ5MfWwWf9H15.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/02.png',
 							},
 							{
 								'index':'coupon',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/b5li4nnkHIHiKM25Z0xZL11710xkmf.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/03.png',
 							},
 							{
 								'index':'gift',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/svVe6eXdBc9vVE86v6DAAbtv6BZwa9.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/04.png',
 							},
 							{
 								'index':'scan',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/JZg25y5wcgOGCi4jZg3oYi0Ioio5wV.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/05.png',
 							},
 							{
 								'index':'pause-circle',
 								'text':'名称',
-								'icon':'https://www.100cms.com.cn/addons/ewei_shopv2/plugin/diypage/static/images/default/icon-1.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/06.png',
 							},
 							{
 								'index':'wifi',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/Cdhz0PkHpM8rBqQDm9Lb9h1N71Mrqv.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/07.png',
 							},
 							{
 								'index':'email',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/se0G5pzn4PGj64PPBpEjcQ699164ee.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/08.png',
 							},
 							{
 								'index':'list',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/d5V5Rj6VrR6NBWQV5vnkrZw6V6cwwv.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/09.png',
 							},
 							{
 								'index':'list',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/DLwVLUw5xAxL335VVv85Ws2UX9XAdv.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/10.png',
 							},
 						],
 						[
 							{
 								'index':'integral',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/sGyW55795yQd7158do4vv19WO15Q68.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/01.png',
 							},
 							{
 								'index':'kefu-ermai',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/JfW2WqhRjr9ciwE29hQ5MfWwWf9H15.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/02.png',
 							},
 							{
 								'index':'coupon',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/b5li4nnkHIHiKM25Z0xZL11710xkmf.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/03.png',
 							},
 							{
 								'index':'gift',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/svVe6eXdBc9vVE86v6DAAbtv6BZwa9.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/04.png',
 							},
 							{
 								'index':'scan',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/JZg25y5wcgOGCi4jZg3oYi0Ioio5wV.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/05.png',
 							},
 							{
 								'index':'pause-circle',
 								'text':'名称',
-								'icon':'https://www.100cms.com.cn/addons/ewei_shopv2/plugin/diypage/static/images/default/icon-1.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/06.png',
 							},
 							{
 								'index':'wifi',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/Cdhz0PkHpM8rBqQDm9Lb9h1N71Mrqv.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/07.png',
 							},
 							{
 								'index':'email',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/se0G5pzn4PGj64PPBpEjcQ699164ee.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/08.png',
 							},
 							{
 								'index':'list',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/d5V5Rj6VrR6NBWQV5vnkrZw6V6cwwv.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/09.png',
 							},
 							{
 								'index':'list',
 								'text':'名称',
-								'icon':'https://img.100cms.com.cn/images/5/2020/05/DLwVLUw5xAxL335VVv85Ws2UX9XAdv.png',
+								'icon':'http://gdshop-img.winlo.net/static/nav/10.png',
 							},
 						],
 					]
