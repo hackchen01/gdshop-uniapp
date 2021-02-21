@@ -5,9 +5,9 @@
 				<view class="left">
 					<u-icon name="home" :size="30" color="rgb(94,94,94)"></u-icon>
 					<view class="store">{{ res.store_name }}</view>
-					<u-icon name="arrow-right" color="rgb(203,203,203)" :size="26"></u-icon>
+					<u-icon name="arrow-right" color="rgb(203,203,203)" :size="30"></u-icon>
 				</view>
-				<view class="right">{{ res.status_text }}</view>
+				<view class="right">{{ getStatusText(res.status) }}</view>
 			</view>
 			<view class="item" v-for="(item, index) in res.subs" :key="index">
 				<view class="left"><image :src="item.cover_photo" mode="aspectFill"></image></view>
@@ -17,11 +17,16 @@
 				</view>
 				<view class="right">
 					<view class="price">
-						￥{{ priceInt(item.sell_price) }}
-						<text class="decimal">.{{ priceDecimal(item.sell_price) }}</text>
+						￥{{ priceInt(fenZhuanYuan(item.sell_price)) }}
+						<text class="decimal">.{{ priceDecimal(fenZhuanYuan(item.sell_price)) }}</text>
 					</view>
 					<view class="number">x{{ item.total }}</view>
 				</view>
+			</view>
+			<view class="tips-table" v-for="(tips,tindex) in res.tips_list" :key="rindex + '_' + tindex">
+				<view class="title">{{tips.title}}</view>
+				<view class="remark">{{tips.remark}}</view>
+				<view class="status">{{tips.status}}</view>
 			</view>
 			<view class="total">
 				共{{ totalNum(res.subs) }}件商品 合计:
@@ -32,11 +37,17 @@
 			</view>
 			<view class="bottom">
 				<view class="more">
-					<u-icon name="more-dot-fill" color="rgb(203,203,203)"></u-icon>
+					<!-- 更多 -->
 				</view>
-				<view class="logistics btn">查看物流</view>
-				<view class="exchange btn">卖了换钱</view>
-				<view class="evaluate btn">评价</view>
+				<view class="btns">
+					<view class="btn" v-if="res.is_express">查看物流</view>
+					<view class="btn primary" 
+					@click="gotoNext(res.id,res.status)"
+					v-if="res.is_show_primary"
+					>
+					{{getNextStatusText(res.status)}}
+					</view>
+				</view>
 			</view>
 		</view>
 		<u-loadmore :status="loadStatus" bgColor="#f2f2f2"></u-loadmore>
@@ -52,6 +63,8 @@ export default {
 			orderPage:0,
 			orderEnd:false,
 			loadStatus: 'loading',
+			next_status_text: [],
+			status_text: [],
 		};
 	},
 	computed: {
@@ -83,6 +96,8 @@ export default {
 				page:that.orderPage,
 				}).then(res => {
 				that.orderList = that.orderList.concat(res.list)
+				that.next_status_text = res.next_status_text
+				that.status_text = res.status_text
 				if (res.page_info.has_more){
 					that.loadStatus = 'loadmore'
 				} else{
@@ -109,9 +124,9 @@ export default {
 		totalPrice(item) {
 			let price = 0;
 			item.map(val => {
-				price += parseFloat(val.sell_price);
+				price += parseFloat(val.sell_price * val.total);
 			});
-			return price.toFixed(2);
+			return this.fenZhuanYuan(price);
 		},
 		// 总件数
 		totalNum(item) {
@@ -121,6 +136,27 @@ export default {
 			});
 			return num;
 		},
+		fenZhuanYuan(_price){
+			return (_price / 100).toFixed(2)
+		},
+		getNextStatusText(_status){
+			if(this.next_status_text[_status]){
+				return this.next_status_text[_status]
+			} else {
+				return '未知'
+			}
+		},
+		getStatusText(_status){
+			if(this.status_text[_status]){
+				return this.status_text[_status]
+			} else {
+				return '未知'
+			}
+		},
+		// 根据订单状态跳转下一个功能
+		gotoNext(_orderId,_status){
+			
+		}
 	}
 };
 </script>

@@ -14,7 +14,8 @@
 			align-items: center;
 			.store {
 				margin: 0 10rpx;
-				font-size: 32rpx;
+				font-size: 30rpx;
+				line-height: 34rpx;
 				font-weight: bold;
 			}
 		}
@@ -71,12 +72,33 @@
 			font-size: 32rpx;
 		}
 	}
+	.tips-table{
+		display: flex;
+		justify-content: space-between;
+		.title{
+			width: 27vw;
+			text-align: right;
+		}
+		.remark{
+			color: #909399;
+			width: 48vw;
+			padding-left: 10rpx;
+		}
+		.status{
+			color: #ff6640;
+			text-align: right;
+		}
+	}
 	.bottom {
 		display: flex;
 		margin-top: 40rpx;
 		padding: 0 10rpx;
 		justify-content: space-between;
 		align-items: center;
+		.btns{
+			display: flex;
+			justify-content:flex-end;
+		}
 		.btn {
 			line-height: 52rpx;
 			width: 160rpx;
@@ -85,10 +107,14 @@
 			font-size: 26rpx;
 			text-align: center;
 			color: $u-type-info-dark;
+			margin-left: 10rpx;
 		}
-		.evaluate {
-			color: $u-type-warning-dark;
-			border-color: $u-type-warning-dark;
+		.primary {
+			color: rgb(216, 30, 6);
+			border-color: rgb(216, 30, 6);
+		}
+		.more{
+			color: rgb(166, 166, 166);
 		}
 	}
 }
