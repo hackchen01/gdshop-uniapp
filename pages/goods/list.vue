@@ -52,6 +52,9 @@
 			}
 		},
 		onLoad() {
+			if (this.$Route.query.cid){
+				this.queryCid = this.$Route.query.cid
+			}
 			this.initData()
 		},
 		onPageScroll(e) {
@@ -67,7 +70,9 @@
 				scrollTop:0,
 				goodsPage:0,
 				goodsStatus:'loadmore',
-				filterData: [
+				queryCid:0,
+				filterData:[],
+				filterData2: [
 					{
 						"name":"分类",
 						"type":"hierarchy",
@@ -126,7 +131,9 @@
 						],
 					},
 				],
-				defaultSelected: [
+				defaultSelected:[],
+				tmpSelected:{},
+				defaultSelected2: [
 					[null,null],
 					[0],
 				],
@@ -135,11 +142,12 @@
 		},
 		methods:{
 			dropdownIsChange(_newIndex){
-				return JSON.stringify(_newIndex) != JSON.stringify(this.defaultSelected)
+				return JSON.stringify(_newIndex) != JSON.stringify(this.tmpSelected)
 			},
 			dropdownConfirm(_data){
+				console.log(_data)
 				if(this.dropdownIsChange(_data.index)){
-					console.log('变化了')
+					this.tmpSelected = _data.index
 				}
 			},
 			goBack(){
@@ -160,6 +168,62 @@
 					else{
 						that.goodsStatus = 'nomore'
 					}
+				})
+				that.$api.goods.filter_data().then(res => {
+					console.log(res)
+					let classifyData = {
+						'name':'分类',
+						"type":"hierarchy",
+						'submenu':[]
+					}
+					let sortData = {
+						'name':'排序',
+						"type":"hierarchy",
+						'submenu':[]
+					}
+					let one = {}
+					let selected_classify_one = null;
+					let selected_classify_two = null;
+					if (res.classify_list){
+						res.classify_list.map((item,one_index) => {
+							one = {
+								'name':item.name,
+								'value':item.id,
+								'submenu':[]
+							}
+							if (item.id == that.queryCid){
+								selected_classify_one = one_index
+							}
+							if(item.subs){
+								item.subs.map((sitem,two_index) => {
+									one.submenu.push({
+										'name':sitem.name,
+										'value':sitem.id
+									})
+									if (sitem.id == that.queryCid){
+										selected_classify_two = two_index
+										selected_classify_one = one_index
+									}
+								})
+							}
+							
+							classifyData.submenu.push(one)
+						})
+					}
+					if (res.sort_list){
+						res.sort_list.map(item => {
+							sortData.submenu.push({
+								'name':item.name,
+								'value':item.key
+							})
+						})
+					}
+					that.filterData = [classifyData,sortData]
+					that.defaultSelected = [
+						[selected_classify_one,selected_classify_two],
+						[res.selected_sort]
+					]
+					console.log(that.defaultSelected)
 				})
 			}
 		}

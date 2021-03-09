@@ -27,6 +27,13 @@ export default ( http ) => ({
 			params: query
 		})
 	},
+	filter_data (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/goods/filter_data',
+			params: query
+		})
+	},
 	test () {
 		return 'test'
 	}
