@@ -6,4 +6,11 @@ export default ( http ) => ({
 			data
 		})
 	},
+	home (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/home',
+			params: query
+		})
+	},
 })

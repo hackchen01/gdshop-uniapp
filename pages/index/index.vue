@@ -6,6 +6,7 @@
 			 :disabled="true" :show-action="false"
 			v-model="keyword"></u-search>
 		</view>
+		<!-- 
 		<view class="swiper-box">
 			<u-swiper :list="swiperList" mode="rect" height="300"></u-swiper>
 		</view>
@@ -80,17 +81,20 @@
 				</view>
 			</view>
 		</view>
-		
+		 -->
+		 <diy-page :data="diyData"></diy-page>
 		<u-back-top :scroll-top="scrollTop"></u-back-top>
 	</view>
 </template>
 
 <script>
 	import goodsList from '@/components/goods-list.vue'
+	import diyPage from '@/components/diy-page.vue'
 	import { mapState, mapMutations } from 'vuex'
 	export default {
 		components:{
-			goodsList
+			goodsList,
+			diyPage
 		},
 		computed: {
 			iconGroupIsSwiper(){
@@ -239,6 +243,7 @@
 				],
 				keyword: '',
 				productList: [],
+				diyData: []
 			}
 		},
 		onLoad() {
@@ -246,7 +251,7 @@
 		},
 		onReachBottom(){
 			if (this.hotGoodsStatus != 'nomore'){
-				this.getHotGoods()
+				// this.getHotGoods()
 			}
 		},
 		onPageScroll(e) {
@@ -255,7 +260,10 @@
 		methods:{
 			initData(){
 				let that = this
-				that.getHotGoods()
+				// that.getHotGoods()
+				that.$api.home.home().then(res => {
+					that.diyData = res
+				})
 			},
 			getHotGoods(){
 				let that = this
