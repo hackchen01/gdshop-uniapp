@@ -58,8 +58,10 @@
 		methods: {
 			loadMore(){
 				// 只有最后一个才有加载更多的功能
-				let lastItem = this.$refs['type12'][this.$refs['type12'].length - 1]
-				lastItem.loadMore()
+				if (this.$refs['type12'].length){
+					let lastItem = this.$refs['type12'][this.$refs['type12'].length - 1]
+					lastItem.loadMore()
+				}
 			}
 		},
 	};
