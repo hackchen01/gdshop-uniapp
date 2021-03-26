@@ -1,12 +1,16 @@
 <template>
-	<view class="notice-box">
-		<u-notice-bar mode="vertical" :more-icon="true" :list="noticeList" @click="gotoClick"></u-notice-bar>
+	<view class="picturew-box mode-2">
+		<view class="picturew-item" v-for="(pic,index) in data.pictures" :key="index">
+			<u-image :src="pic.img" class="img" 
+			mode="widthFix">
+			</u-image>
+		</view>
 	</view>
 </template>
 
 <script>
 	export default {
-		name: "diy-page-type03",
+		name: "diy-page-type06",
 		props: {
 			// DIY页面类型
 			typeId: {
@@ -30,16 +34,7 @@
 
 		},
 		computed: {
-			noticeList(){
-				let tmps = []
-				if (!this.data){
-					return tmps
-				}
-				this.data.data_list.map(item => {
-					tmps.push(item.title)
-				})
-				return tmps
-			}
+
 		},
 		methods: {
 			gotoClick(_index){
@@ -64,5 +59,31 @@
 </script>
 
 <style lang="scss" scoped>
-	
+	.picturew-box{
+		display: flex;
+		flex-wrap: wrap;
+		.picturew-item{
+			padding: 4rpx;
+		}
+	}
+	.picturew-box.mode-1{
+		.picturew-item{
+			width: 100%;
+		}
+	}
+	.picturew-box.mode-2{
+		.picturew-item{
+			width: 50%;
+		}
+	}
+	.picturew-box.mode-3{
+		.picturew-item{
+			width: 33.333%;
+		}
+	}
+	.picturew-box.mode-4{
+		.picturew-item{
+			width: 25%;
+		}
+	}
 </style>

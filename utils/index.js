@@ -1,7 +1,9 @@
 import * as article from './modules/article'
+import * as diyPage from './modules/diyPage'
 
 const utils = {
-  article
+  article,
+  diyPage
 }
 
 /**
