@@ -27,9 +27,9 @@
 					v-model="isAgree"
 				>同意</u-checkbox>
 				<!-- 协议地址 -->
-				<view class="text" @click="gotoArticle('privacy_policy')">《隐私政策》</view>
+				<view class="text" @click="utils.article.gotoArticlePrivacyPolicy()">《隐私政策》</view>
 				<view class="text">和</view>
-				<view class="text" @click="gotoArticle('agreement')">《用户服务协议》</view>
+				<view class="text" @click="utils.article.gotoArticleAgreement()">《用户服务协议》</view>
 			</view>
 			
 			<button class="confirm-btn" :class="isDisable ? 'disable':''" @click="toSubmit">
@@ -62,6 +62,7 @@
 				tips: '',
 				seconds: 10,
 				isAgree:true,
+				utils:utils,
 				rules:{
 					mobile:[{
 						required: true, 
@@ -174,10 +175,6 @@
 	        		}, 3000);
 	        	});
 	        },
-			gotoArticle(_type){
-				//utils.article.gotoArticle(_type)
-				this.$myRouter.push({name:'index/article',params:{type:_type}})
-			},
 	    },
 	
 	}
