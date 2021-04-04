@@ -2,7 +2,7 @@
 	<view class="register-box">
 		<view class="wrapper">
 		    <view class="form">
-				<u-form :model="form" ref="uForm" label-width="180" label-align="right" :error-type="['border-bottom','toast']">
+				<u-form :model="form" ref="uForm" label-width="180" label-align="right">
 					<u-form-item label="手机号" prop="mobile">
 						<u-input v-model="form.mobile" placeholder="请输入账号" />
 					</u-form-item>
@@ -175,7 +175,8 @@
 	        	});
 	        },
 			gotoArticle(_type){
-				utils.article.gotoArticle(_type)
+				//utils.article.gotoArticle(_type)
+				this.$myRouter.push({name:'index/article',params:{type:_type}})
 			},
 	    },
 	

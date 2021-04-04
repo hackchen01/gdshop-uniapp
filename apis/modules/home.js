@@ -13,4 +13,11 @@ export default ( http ) => ({
 			params: query
 		})
 	},
+	send_vcode (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/send_vcode',
+			params: query
+		})
+	},
 })

@@ -2,56 +2,60 @@
     <view class="container">
         <view class="wrapper">
             <view class="form">
-				<u-form :model="form" ref="uForm">
-					<u-form-item label="账号" prop="mobile">
-						<u-input v-model="form.mobile" placeholder="请输入账号" />
+				<u-form :model="form" ref="uForm" label-width="180" label-align="right">
+					<u-form-item label="手机号" prop="mobile">
+						<u-input v-model="form.mobile" placeholder="请输入手机号" />
 					</u-form-item>
-					<u-form-item label="密码" prop="password">
-						<u-input type="password" v-model="form.password" placeholder="请输入密码" />
+					<u-form-item label="验证码" prop="vcode">
+						<u-input v-model="form.vcode" placeholder="请输入验证码" />
+						<view class="" slot="right">
+							<u-button size="mini" shape="circle" 
+							type="error" :disabled="!mobileIsOk"
+							@tap="getCode">{{tips}}</u-button>
+						</view>
 					</u-form-item>
 				</u-form>
 			</view>
+			<view class="agree-box">
+				<u-checkbox active-color="#F00"
+					v-model="isAgree"
+				>同意</u-checkbox>
+				<!-- 协议地址 -->
+				<view class="text" @click="gotoArticle('privacy_policy')">《隐私政策》</view>
+				<view class="text">和</view>
+				<view class="text" @click="gotoArticle('agreement')">《用户服务协议》</view>
+			</view>
+			
             <button class="confirm-btn" :class="isDisable ? 'disable':''" @click="toSubmit">
 				<u-loading mode="flower" :show="isLoading"></u-loading>	登录
 			</button>
-            <view style="margin-top: 32px;text-align: center">
-                <view>
-					没有账号？
-                    <text style="color: #e10a07" @click="register()">立即注册</text>
-                </view>
-				<view style="margin-top: 30rpx;">
-					忘记密码？
-					<text style="color: #e10a07" @click="forget()">找回密码</text>
-				</view>
-            </view>
         </view>
-		<view class="quick-login">
-			<view class="title">
-				<text>————— 快捷登陆 —————</text>
-			</view>
-			<view class="icons">
-				<u-icon custom-prefix="g-icon" class="ql-icon" name="phone_" color="rgb(162, 162, 162)" size="86" @click="quick_login_vcode"></u-icon>
-				<u-icon class="ql-icon" name="weixin-circle-fill" color="rgb(4,174,15)" size="86"></u-icon>
-				<u-icon class="ql-icon" name="qq-circle-fill" color="rgb(74,154,253)" size="86"></u-icon>
-			</view>
-		</view>
+		<u-verification-code :seconds="seconds" @end="end" @start="start" ref="uCode"
+		change-text="X秒后重新获取"
+				@change="codeChange"></u-verification-code>
     </view>
 </template>
 
 <script>
     export default {
 		computed:{
+			mobileIsOk(){
+				return this.$u.test.mobile(this.form.mobile)
+			},
 			isDisable(){
 				return this.form.mobile.length < 1 || 
-				this.form.password.length < 1 || this.isLoading;
+				this.form.vcode.length < 1 || this.isLoading;
 			}
 		},
         data() {
             return {
+				tips: '',
+				seconds: 10,
+				isAgree:true,
 				rules:{
 					mobile:[{
 						required: true, 
-						message: '请输入账号',
+						message: '请输入手机号',
 						trigger: ['change','blur']
 					},
 					{
@@ -66,15 +70,15 @@
 						trigger: ['change','blur'],
 					}
 					],
-					password:{
+					vcode:{
 						required: true, 
-						message: '请输入密码',
+						message: '请输入验证码',
 						trigger: ['change','blur']
 					},
 				},
 				form:{
 					mobile: '',
-					password: '',
+					vcode: '',
 				},
 				isLoading: false
             }
@@ -83,15 +87,40 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
         methods: {
-			quick_login_vcode() {
-			    this.$myRouter.push({name:'index/login_vcode'})
+			codeChange(text) {
+				this.tips = text;
 			},
-            forget() {
-                this.$myRouter.push({name:'index/forget'})
-            },
-            register() {
-                this.$myRouter.push({name:'index/register'})
-            },
+			getCode() {
+				const that = this
+				if(this.$refs.uCode.canGetCode) {
+					// 模拟向后端请求验证码
+					uni.showLoading({
+						title: '正在获取验证码'
+					})
+					that.$api.home.send_vcode({
+						mobile:that.form.mobile,
+						scene:'login'
+					}).then(res => {
+						uni.hideLoading();
+						that.$u.toast('验证码已发送');
+						that.$refs.uCode.start();
+					}).catch(err => {
+						uni.hideLoading();
+						console.log(err)
+					})
+					setTimeout(() => {
+						uni.hideLoading();
+					}, 3000);
+				} else {
+					that.$u.toast('倒计时结束后再发送');
+				}
+			},
+			end() {
+				
+			},
+			start() {
+				
+			},
             toSubmit() {
 				let that = this
 				if(that.isDisable || that.isLoading){
@@ -102,14 +131,15 @@
 						that.isLoading = true
 						that.$api.member.login({
 							account:that.form.mobile,
-							password:that.form.password,
+							vcode:that.form.vcode,
+							type:'vcode'
 						}).then(res => {
 							that.isLoading = false
 							console.log(res)
 							// 设置 store状态
 							that.$store.dispatch('setMemberLogin',res)
 							that.$u.toast('登陆成功')
-							that.$myRouter.back()
+							that.$myRouter.back(2)
 						}).catch(err => {
 							that.isLoading = false
 							that.$u.toast(err.message)
