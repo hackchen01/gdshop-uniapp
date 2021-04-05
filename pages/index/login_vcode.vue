@@ -45,7 +45,7 @@
 			},
 			isDisable(){
 				return this.form.mobile.length < 1 || 
-				this.form.vcode.length < 1 || this.isLoading;
+				this.form.vcode.length < 1 || this.isLoading || !this.isAgree;
 			}
 		},
         data() {

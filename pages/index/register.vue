@@ -54,6 +54,7 @@
 				this.form.vcode.length < 1 || 
 				this.form.password.length < 1 || 
 				this.form.password2.length < 1 || 
+				!this.isAgree
 				this.isLoading;
 			}
 		},

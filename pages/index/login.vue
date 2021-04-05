@@ -31,8 +31,8 @@
 			</view>
 			<view class="icons">
 				<u-icon custom-prefix="g-icon" class="ql-icon" name="phone_" color="rgb(162, 162, 162)" size="86" @click="quick_login_vcode"></u-icon>
-				<u-icon class="ql-icon" name="weixin-circle-fill" color="rgb(4,174,15)" size="86"></u-icon>
-				<u-icon class="ql-icon" name="qq-circle-fill" color="rgb(74,154,253)" size="86"></u-icon>
+				<u-icon class="ql-icon" name="weixin-circle-fill" color="rgb(4,174,15)" size="86" @click="quick_login_weixin"></u-icon>
+				<u-icon class="ql-icon" name="qq-circle-fill" color="rgb(74,154,253)" size="86" @click="quick_login_qq"></u-icon>
 			</view>
 		</view>
     </view>
@@ -85,6 +85,12 @@
         methods: {
 			quick_login_vcode() {
 			    this.$myRouter.push({name:'index/login_vcode'})
+			},
+			quick_login_weixin(){
+				this.$u.toast('开发中')
+			},
+			quick_login_qq(){
+				this.$u.toast('开发中')
 			},
             forget() {
                 this.$myRouter.push({name:'index/forget'})
