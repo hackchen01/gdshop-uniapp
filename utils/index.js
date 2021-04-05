@@ -1,9 +1,11 @@
 import * as article from './modules/article'
 import * as diyPage from './modules/diyPage'
+import * as myUrl from './modules/myUrl.js'
 
 const utils = {
   article,
-  diyPage
+  diyPage,
+  myUrl
 }
 
 /**

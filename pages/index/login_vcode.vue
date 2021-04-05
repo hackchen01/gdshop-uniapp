@@ -109,6 +109,7 @@
 					}).catch(err => {
 						uni.hideLoading();
 						console.log(err)
+						that.$u.toast(err.message);
 					})
 					setTimeout(() => {
 						uni.hideLoading();
@@ -131,7 +132,7 @@
                 that.$refs.uForm.validate(valid => {
 					if (valid) {
 						that.isLoading = true
-						that.$api.member.login({
+						that.$api.home.login({
 							account:that.form.mobile,
 							vcode:that.form.vcode,
 							type:'vcode'

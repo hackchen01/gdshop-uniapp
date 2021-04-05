@@ -20,4 +20,18 @@ export default ( http ) => ({
 			params: query
 		})
 	},
+	register (data = {}) {
+		return http.request({
+			method: 'POST',
+			url: '/register',
+			data
+		})
+	},
+	forget (data = {}) {
+		return http.request({
+			method: 'POST',
+			url: '/forget',
+			data
+		})
+	},
 })

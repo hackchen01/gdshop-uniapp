@@ -126,50 +126,59 @@
 				this.tips = text;
 			},
 			getCode() {
+				const that = this
 				if(this.$refs.uCode.canGetCode) {
 					// 模拟向后端请求验证码
 					uni.showLoading({
 						title: '正在获取验证码'
 					})
+					that.$api.home.send_vcode({
+						mobile:that.form.mobile,
+						scene:'reg'
+					}).then(res => {
+						uni.hideLoading();
+						that.$u.toast('验证码已发送');
+						that.$refs.uCode.start();
+					}).catch(err => {
+						uni.hideLoading();
+						console.log(err)
+						that.$u.toast(err.message);
+					})
 					setTimeout(() => {
 						uni.hideLoading();
-						// 这里此提示会被this.start()方法中的提示覆盖
-						this.$u.toast('验证码已发送');
-						// 通知验证码组件内部开始倒计时
-						this.$refs.uCode.start();
-					}, 2000);
+					}, 3000);
 				} else {
-					this.$u.toast('倒计时结束后再发送');
+					that.$u.toast('倒计时结束后再发送');
 				}
 			},
 			end() {
-				this.$u.toast('倒计时结束');
+				
 			},
 			start() {
-				this.$u.toast('倒计时开始');
+				
 			},
-	        forget() {
-	            uni.navigateTo({
-	                url: '/pages/public/pwd'
-	            });
-	        },
-	        register() {
-	            uni.navigateTo({
-	                url: '/pages/public/register'
-	            });
-	        },
 	        toSubmit() {
 	        	let that = this
 	        	if(that.isDisable || that.isLoading){
 	        		return false
 	        	}
-	        	that.isLoading = true
 	            that.$refs.uForm.validate(valid => {
-	        		if (valid) {
-	        			console.log('验证通过');
-	        		} else {
-	        			console.log('验证失败');
+	        		if (!valid) {
+						// 验证失败
+	        			return false
 	        		}
+					that.isLoading = true
+					that.$api.home.register(that.form).then(res => {
+						that.isLoading = false
+						that.$u.toast('注册成功')
+						setTimeout(function() {
+							that.$myRouter.back()
+						}, 2000);
+					})
+					.catch(err => {
+						that.isLoading = false
+						that.$u.toast('注册失败，' + err.message)
+					})
 	        		
 	        		setTimeout(function() {
 	        			that.isLoading = false

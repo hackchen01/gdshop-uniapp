@@ -26,6 +26,10 @@ const mutations = {
 	memberLayout:(state, value) => {
 	  state.memberInfo = {};
 	  state.memberToken = '';
+	  // 清空购物车数量
+	  setTimeout(function() {
+		  uni.$emit('CART_COUNT_CHANGE',0)
+	  }, 1000);
 	},
 }
 const actions = {
