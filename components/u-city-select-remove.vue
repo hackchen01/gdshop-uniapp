@@ -362,8 +362,8 @@
 		.area-item {
 			width: 33.3333333%;
 			height: 800rpx;
-			border-right: 1px solid #82848A;
-			border-top: 1px solid #82848A;
+			border-right: 1px solid #CCC;
+			border-top: 1px solid #CCC;
 		}
 	}
 </style>
