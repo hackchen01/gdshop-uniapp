@@ -159,11 +159,13 @@
 					};
 				}
 				if (this.isChooseC) {
-					tabsList[1]['name'] = this.citys[this.city]['label'];
-					tabsList[2] = {
-						name: "请选择",
-						show: this.hideArea == false,
-					};
+					if(this.citys[this.city]){
+						tabsList[1]['name'] = this.citys[this.city]['label'];
+						tabsList[2] = {
+							name: "请选择",
+							show: this.hideArea == false,
+						};
+					}
 				}
 				if (this.isChooseA) {
 					tabsList[2]['name'] = this.areas[this.area]['label'];
@@ -292,37 +294,50 @@
 				// this.citys = citys[index];
 				console.log(this.provinces[index])
 				if (true == that.isGetData){
-					this.getCity(this.provinces[index]['value'])
+					// 获取数据前先清空原数据
+					that.citys = []
+					uni.showLoading({})
+					this.getCity(this.provinces[index]['value'],function(){
+						// 数据加载完成再做切换
+						that.tabsIndex = 1;
+						// 如果 隐藏城市，自动加载下一级
+						if (that.hideCity){
+							that.cityChange(0)
+						}
+						else{
+							uni.hideLoading()
+						}
+					})
 				}
-				this.tabsIndex = 1;
 				this.hideCity = this.provinces[index]['is_next'] == 0
-				// 如果 隐藏城市，自动加载下一级
-				if (that.hideCity && true == that.isGetData){
-					setTimeout(function() {
-						that.cityChange(0)
-					}, 500);
-				}
 			},
 			cityChange(index) {
+				const that = this
 				this.isChooseC = true;
 				this.isChooseA = false;
 				this.isChooseS = false;
 				this.city = index;
 				// this.areas = areas[this.province][index];
-				console.log(this.citys[index])
 				if (true == this.isGetData){
-					this.getArea(this.citys[index]['value'])
+					uni.showLoading({})
+					this.getArea(this.citys[index]['value'],function(){
+						uni.hideLoading()
+						that.tabsIndex = 2;
+					})
 				}
-				this.tabsIndex = 2;
 			},
 			areaChange(index) {
+				const that = this
 				this.isChooseA = true;
 				this.isChooseS = false;
 				this.area = index;
 				if (true == this.isGetData){
-					this.getStreet(this.areas[index]['value'])
+					uni.showLoading({})
+					this.getStreet(this.areas[index]['value'],function(){
+						uni.hideLoading()
+						that.tabsIndex = 3;
+					})
 				}
-				this.tabsIndex = 3;
 			},
 			streetChange(index){
 				this.isChooseS = true;
