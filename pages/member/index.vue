@@ -133,16 +133,24 @@
 					0,
 					0,
 				],
+				defaultOrderNum:[
+					0,
+					0,
+					0,
+					0,
+					0,
+				]
 			}
 		},
 		onShow() {
 			if(this.$store.state.memberToken){
 				this.memberInfo = this.$store.state.memberInfo
+				this.getMemberData()
 			}
 			else{
 				this.memberInfo = this.defaultMemberInfo
+				this.order_num = this.defaultOrderNum
 			}
-			this.getMemberData()
 		},
 		methods: {
 			getWechatuserinfo() {

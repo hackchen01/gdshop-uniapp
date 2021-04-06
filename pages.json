@@ -27,6 +27,17 @@
 			}
 		},
 		{
+			"path": "pages/index/login_vcode",
+			"name":"index/login_vcode",
+			"guest":true,
+			"meta":{
+				"title": "短信快速登录"
+			},
+			"style": {
+				"navigationBarTitleText": "短信快速登录"
+			}
+		},
+		{
 			"path": "pages/index/register",
 			"name":"index/register",
 			"guest":true,
@@ -46,6 +57,17 @@
 			},
 			"style": {
 				"navigationBarTitleText": "找回密码"
+			}
+		},
+		{
+			"path": "pages/index/article",
+			"name":"index/article",
+			"guest":true,
+			"meta":{
+				"title": "文章详情"
+			},
+			"style": {
+				"navigationBarTitleText": "文章详情"
 			}
 		},
 		{

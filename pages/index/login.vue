@@ -2,7 +2,7 @@
     <view class="container">
         <view class="wrapper">
             <view class="form">
-				<u-form :model="form" ref="uForm" :error-type="['border-bottom','toast']">
+				<u-form :model="form" ref="uForm">
 					<u-form-item label="账号" prop="mobile">
 						<u-input v-model="form.mobile" placeholder="请输入账号" />
 					</u-form-item>
@@ -30,8 +30,9 @@
 				<text>————— 快捷登陆 —————</text>
 			</view>
 			<view class="icons">
-				<u-icon class="ql-icon" name="weixin-circle-fill" color="rgb(4,174,15)" size="86"></u-icon>
-				<u-icon class="ql-icon" name="qq-circle-fill" color="rgb(74,154,253)" size="86"></u-icon>
+				<u-icon custom-prefix="g-icon" class="ql-icon" name="phone_" color="rgb(162, 162, 162)" size="86" @click="quick_login_vcode"></u-icon>
+				<u-icon class="ql-icon" name="weixin-circle-fill" color="rgb(4,174,15)" size="86" @click="quick_login_weixin"></u-icon>
+				<u-icon class="ql-icon" name="qq-circle-fill" color="rgb(74,154,253)" size="86" @click="quick_login_qq"></u-icon>
 			</view>
 		</view>
     </view>
@@ -82,6 +83,15 @@
 			this.$refs.uForm.setRules(this.rules);
 		},
         methods: {
+			quick_login_vcode() {
+			    this.$myRouter.push({name:'index/login_vcode'})
+			},
+			quick_login_weixin(){
+				this.$u.toast('开发中')
+			},
+			quick_login_qq(){
+				this.$u.toast('开发中')
+			},
             forget() {
                 this.$myRouter.push({name:'index/forget'})
             },
@@ -93,9 +103,9 @@
 				if(that.isDisable || that.isLoading){
 					return false
 				}
-				that.isLoading = true
                 that.$refs.uForm.validate(valid => {
 					if (valid) {
+						that.isLoading = true
 						that.$api.member.login({
 							account:that.form.mobile,
 							password:that.form.password,

@@ -7,7 +7,7 @@
 						<u-grid :col="data.num" @click="iconGroupClick" 
 						:border="isShowBorder != 0" hover-class="none">
 							<u-grid-item v-for="(item, index) in g" :index="item.index" :key="index"
-							:bg-color="iconGroup.item_bg_color">
+							:bg-color="data.item_bg_color">
 								<u-icon :name="item.icon" :size="data.icon_size"></u-icon>
 								<text class="grid-text">{{ item.text }}</text>
 							</u-grid-item>
@@ -25,7 +25,7 @@
 					<u-grid :col="data.num" @click="iconGroupClick" 
 					:border="isShowBorder != 0" hover-class="none">
 						<u-grid-item v-for="(item, index) in g" :index="item.index" :key="index"
-						:bg-color="iconGroup.item_bg_color">
+						:bg-color="data.item_bg_color">
 							<u-icon :name="item.icon" :size="data.icon_size"></u-icon>
 							<text class="grid-text">{{ item.text }}</text>
 						</u-grid-item>
@@ -37,6 +37,7 @@
 </template>
 
 <script>
+	import utils from '@/utils/index'
 	export default {
 		name: "diy-page-type02",
 		props: {
@@ -67,20 +68,30 @@
 				let tmps = []
 				this.data.photos.map((item,index) => {
 					tmps.push({
-								'index':'index-' + index,
+								'index':index,
 								'text':item.title,
 								'icon':item.img,
 							})
 				})
-				return tmps
+				return this.chunk(tmps,this.data.page_size)
 			},
 			iconGroupIsSwiper(){
 				return this.iconList.length > 1
 			}
 		},
 		methods: {
+			chunk(arr, size) {
+			  var rsArr = [];
+			  for(var i=0;i<arr.length;i+=size){
+			    var tempArr=[];
+			    for(var j=0;j<size&&i+j<arr.length;j++){
+			      tempArr.push(arr[i+j]);
+			    }
+			    rsArr.push(tempArr);
+			  }
+			  return rsArr;
+			},
 			gotoClick(_index){
-				console.log(_index)
 				let row = this.getClickRow(_index)
 				if(!row){
 					return false
@@ -92,20 +103,48 @@
 				}
 				
 				console.log(row)
+				utils.diyPage.gotoUrl(row.type_id,row.link)
 			},
 			getClickRow(_index){
-				return this.data.data_list[_index]
+				return this.data.photos[_index]
 			},
 			iconGroupChange(e) {
 				this.iconGroupCurrent = e.detail.current;
 			},
 			iconGroupClick(e) {
 				console.log(e)
+				this.gotoClick(e)
 			}
 		},
 	};
 </script>
 
 <style lang="scss" scoped>
+	/deep/ .u-grid-item-box{
+		padding:20rpx 0 0 0 !important;
+		.grid-text{
+			margin-top: 10rpx;
+			font-size: 20rpx;
+		}
+	}
 	
+	.icon-group-box{
+		.indicator-dots {
+			margin-top: 10rpx;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.indicator-dots-item {
+			background-color: rgba(0, 0, 0, 0.3);
+			height: 4px;
+			width: 13px;
+			margin: 0 3px;
+		}
+		
+		.indicator-dots-active {
+			background-color: rgba(255, 0, 0, 0.8);
+		}
+	}
 </style>

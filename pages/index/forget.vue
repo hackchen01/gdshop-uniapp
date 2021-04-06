@@ -2,7 +2,7 @@
 	<view class="register-box">
 		<view class="wrapper">
 		    <view class="form">
-				<u-form :model="form" ref="uForm" label-width="180" label-align="right" :error-type="['border-bottom','toast']">
+				<u-form :model="form" ref="uForm" label-width="180" label-align="right">
 					<u-form-item label="手机号" prop="mobile">
 						<u-input v-model="form.mobile" placeholder="请输入账号" />
 					</u-form-item>
@@ -115,38 +115,37 @@
 				this.tips = text;
 			},
 			getCode() {
+				const that = this
 				if(this.$refs.uCode.canGetCode) {
 					// 模拟向后端请求验证码
 					uni.showLoading({
 						title: '正在获取验证码'
 					})
+					that.$api.home.send_vcode({
+						mobile:that.form.mobile,
+						scene:'forget'
+					}).then(res => {
+						uni.hideLoading();
+						that.$u.toast('验证码已发送');
+						that.$refs.uCode.start();
+					}).catch(err => {
+						uni.hideLoading();
+						console.log(err)
+						that.$u.toast(err.message);
+					})
 					setTimeout(() => {
 						uni.hideLoading();
-						// 这里此提示会被this.start()方法中的提示覆盖
-						this.$u.toast('验证码已发送');
-						// 通知验证码组件内部开始倒计时
-						this.$refs.uCode.start();
-					}, 2000);
+					}, 3000);
 				} else {
-					this.$u.toast('倒计时结束后再发送');
+					that.$u.toast('倒计时结束后再发送');
 				}
 			},
 			end() {
-				this.$u.toast('倒计时结束');
+				
 			},
 			start() {
-				this.$u.toast('倒计时开始');
+				
 			},
-	        forget() {
-	            uni.navigateTo({
-	                url: '/pages/public/pwd'
-	            });
-	        },
-	        register() {
-	            uni.navigateTo({
-	                url: '/pages/public/register'
-	            });
-	        },
 	        toSubmit() {
 	        	let that = this
 	        	if(that.isDisable || that.isLoading){
@@ -154,11 +153,22 @@
 	        	}
 	        	that.isLoading = true
 	            that.$refs.uForm.validate(valid => {
-	        		if (valid) {
-	        			console.log('验证通过');
-	        		} else {
-	        			console.log('验证失败');
+	        		if (!valid) {
+						return false
 	        		}
+	        		
+	        		that.isLoading = true
+	        		that.$api.home.forget(that.form).then(res => {
+	        			that.isLoading = false
+	        			that.$u.toast('找回密码成功')
+						setTimeout(function() {
+							that.$myRouter.back()
+						}, 2000);
+	        		})
+	        		.catch(err => {
+	        			that.isLoading = false
+	        			that.$u.toast('失败，' + err.message)
+	        		})
 	        		
 	        		setTimeout(function() {
 	        			that.isLoading = false

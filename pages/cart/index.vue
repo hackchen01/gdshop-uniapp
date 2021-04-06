@@ -5,7 +5,7 @@
 			<view class="empty">
 				<u-empty text="请先登陆" mode="permission" iconSize="180" fontSize="36">
 					<view slot="bottom">
-						<button class="confirm-btn" @click="gotoLogin">
+						<button class="confirm-btn" @click="utils.myUrl.gotoLogin">
 							登录
 						</button>
 					</view>
@@ -78,6 +78,7 @@
 
 <script>
 	import _ from '@holyhigh/func.js'
+	import utils from '@/utils/index'
 	export default{
 		components:{
 
@@ -109,10 +110,17 @@
 			
 		},
 		onShow() {
-			this.getDataList()
+			if(this.$store.state.memberToken){
+				this.getDataList()
+			}
+			else {
+				this.isLogin = false
+				uni.$emit('CART_COUNT_CHANGE',0)
+			}
 		},
 		data() {
 			return {
+				utils:utils,
 				saveLock:true, // 锁定保存
 				cartList: [],
 				totalMoney:0,
@@ -170,11 +178,8 @@
 					that.isSelectAll = (that.selectOrderCount == that.cartList.length)
 				},100)
 			},
-			gotoLogin(){
-				this.$myRouter.push({name:'index/login'})
-			},
 			gotoGoodsDetails(_goodsId){
-				this.$myRouter.push({name:'goods/details', params: { id: _goodsId }})
+				utils.myUrl.gotoGoodsDetails(_goodsId)
 			},
 			saveChangeCart(_item){
 				this.$api.cart.save({

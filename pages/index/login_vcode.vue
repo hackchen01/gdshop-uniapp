@@ -1,10 +1,10 @@
 <template>
-	<view class="register-box">
-		<view class="wrapper">
-		    <view class="form">
+    <view class="container">
+        <view class="wrapper">
+            <view class="form">
 				<u-form :model="form" ref="uForm" label-width="180" label-align="right">
 					<u-form-item label="手机号" prop="mobile">
-						<u-input v-model="form.mobile" placeholder="请输入账号" />
+						<u-input v-model="form.mobile" placeholder="请输入手机号" />
 					</u-form-item>
 					<u-form-item label="验证码" prop="vcode">
 						<u-input v-model="form.vcode" placeholder="请输入验证码" />
@@ -13,12 +13,6 @@
 							type="error" :disabled="!mobileIsOk"
 							@tap="getCode">{{tips}}</u-button>
 						</view>
-					</u-form-item>
-					<u-form-item label="密码" prop="password">
-						<u-input type="password" v-model="form.password" placeholder="请输入密码" />
-					</u-form-item>
-					<u-form-item label="确认密码" prop="password2">
-						<u-input type="password" v-model="form.password2" placeholder="请输入确认密码" />
 					</u-form-item>
 				</u-form>
 			</view>
@@ -32,34 +26,30 @@
 				<view class="text" @click="utils.article.gotoArticleAgreement()">《用户服务协议》</view>
 			</view>
 			
-			<button class="confirm-btn" :class="isDisable ? 'disable':''" @click="toSubmit">
-				<u-loading mode="flower" :show="isLoading"></u-loading>	注册
+            <button class="confirm-btn" :class="isDisable ? 'disable':''" @click="toSubmit">
+				<u-loading mode="flower" :show="isLoading"></u-loading>	登录
 			</button>
-		</view>
+        </view>
 		<u-verification-code :seconds="seconds" @end="end" @start="start" ref="uCode"
 		change-text="X秒后重新获取"
 				@change="codeChange"></u-verification-code>
-	</view>
+    </view>
 </template>
 
 <script>
 	import utils from '@/utils/index.js'
-	export default {
+    export default {
 		computed:{
 			mobileIsOk(){
 				return this.$u.test.mobile(this.form.mobile)
 			},
 			isDisable(){
 				return this.form.mobile.length < 1 || 
-				this.form.vcode.length < 1 || 
-				this.form.password.length < 1 || 
-				this.form.password2.length < 1 || 
-				!this.isAgree
-				this.isLoading;
+				this.form.vcode.length < 1 || this.isLoading || !this.isAgree;
 			}
 		},
-	    data() {
-	        return {
+        data() {
+            return {
 				tips: '',
 				seconds: 10,
 				isAgree:true,
@@ -67,7 +57,7 @@
 				rules:{
 					mobile:[{
 						required: true, 
-						message: '请输入账号',
+						message: '请输入手机号',
 						trigger: ['change','blur']
 					},
 					{
@@ -87,41 +77,18 @@
 						message: '请输入验证码',
 						trigger: ['change','blur']
 					},
-					password:{
-						required: true, 
-						message: '请输入密码',
-						trigger: ['change','blur']
-					},
-					password2:[
-						{
-							required: true, 
-							message: '请输入确认密码',
-							trigger: ['change','blur']
-						},
-						{
-							// 自定义验证函数
-							validator: (rule, value, callback) => {
-								return this.form.password == this.form.password2
-							},
-							message: '二次密码不一致',
-							// 触发器可以同时用blur和change
-							trigger: ['change','blur'],
-						},
-					],
 				},
 				form:{
 					mobile: '',
 					vcode: '',
-					password: '',
-					password2: '',
 				},
 				isLoading: false
-	        }
-	    },
+            }
+        },
 		onReady() {
 			this.$refs.uForm.setRules(this.rules);
 		},
-	    methods: {
+        methods: {
 			codeChange(text) {
 				this.tips = text;
 			},
@@ -134,7 +101,7 @@
 					})
 					that.$api.home.send_vcode({
 						mobile:that.form.mobile,
-						scene:'reg'
+						scene:'login'
 					}).then(res => {
 						uni.hideLoading();
 						that.$u.toast('验证码已发送');
@@ -157,39 +124,57 @@
 			start() {
 				
 			},
-	        toSubmit() {
-	        	let that = this
-	        	if(that.isDisable || that.isLoading){
-	        		return false
-	        	}
-	            that.$refs.uForm.validate(valid => {
-	        		if (!valid) {
-						// 验证失败
-	        			return false
-	        		}
-					that.isLoading = true
-					that.$api.home.register(that.form).then(res => {
-						that.isLoading = false
-						that.$u.toast('注册成功')
-						setTimeout(function() {
-							that.$myRouter.back()
-						}, 2000);
-					})
-					.catch(err => {
-						that.isLoading = false
-						that.$u.toast('注册失败，' + err.message)
-					})
-	        		
-	        		setTimeout(function() {
-	        			that.isLoading = false
-	        		}, 3000);
-	        	});
-	        },
-	    },
-	
-	}
+            toSubmit() {
+				let that = this
+				if(that.isDisable || that.isLoading){
+					return false
+				}
+                that.$refs.uForm.validate(valid => {
+					if (valid) {
+						that.isLoading = true
+						that.$api.home.login({
+							account:that.form.mobile,
+							vcode:that.form.vcode,
+							type:'vcode'
+						}).then(res => {
+							that.isLoading = false
+							console.log(res)
+							// 设置 store状态
+							that.$store.dispatch('setMemberLogin',res)
+							that.$u.toast('登陆成功')
+							that.$myRouter.back(2)
+						}).catch(err => {
+							that.isLoading = false
+							that.$u.toast(err.message)
+						})
+					} else {
+						console.log('验证失败');
+					}
+				});
+            },
+            getUserInfo(userId, token) {
+                
+            },
+        },
+
+    }
 </script>
 
-<style lang="scss" scoped>
+<style lang='scss'>
     @import '@/static/css/login.scss';
+	
+	.quick-login{
+		.title{
+			color: #AAA;
+		}
+		.icons{
+			margin-top: 30rpx;
+			.ql-icon{
+				margin-left: 30rpx;
+				&:first-child{
+					margin-left: 0;
+				}
+			}
+		}
+	}
 </style>
