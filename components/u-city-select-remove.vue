@@ -1,7 +1,7 @@
 <template>
 	<u-popup v-model="value" mode="bottom" :popup="false" :mask="true" :closeable="true" :safe-area-inset-bottom="true"
 	 close-icon-color="#ffffff" :z-index="uZIndex" :maskCloseAble="maskCloseAble" @close="close">
-		<gdshop-tabs v-if="value" :list="genTabsList" :is-scroll="true" 
+		<gdshop-tabs active-color="#d81e06" v-if="value" :list="genTabsList" :is-scroll="true" 
 		:current="tabsIndex" @change="tabsChange" ref="tabs"></gdshop-tabs>
 		<view class="area-box">
 			<view class="u-flex" :class="{ 'change':isChange }">

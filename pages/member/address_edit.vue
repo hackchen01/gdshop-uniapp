@@ -149,18 +149,27 @@ export default {
 		},
 		toAddSite(){
 			const that = this
-			this.formData.is_default = this.checked ? 1 : 0;
+			that.formData.is_default = that.checked ? 1 : 0;
+			if(!that.$u.test.mobile(that.formData.mobile)){
+				that.$u.toast('请输入正确的手机号码')
+				return false
+			}
 			let methodFn
-			if (this.addressId > 0) {
-				this.formData.id = this.addressId
-				methodFn = this.$api.member_address.save
+			if (that.addressId > 0) {
+				that.formData.id = that.addressId
+				methodFn = that.$api.member_address.save
 			}
 			else{
-				methodFn = this.$api.member_address.add
+				methodFn = that.$api.member_address.add
 			}
-			methodFn(this.formData).then(res => {
+			uni.showLoading()
+			methodFn(that.formData).then(res => {
+				uni.hideLoading()
 				uni.$emit('address_list_is_reload')
 				that.$u.toast('保存成功')
+				setTimeout(function () {
+					that.$myRouter.back()
+				},1000)
 			})
 		},
 		delAddress(){
