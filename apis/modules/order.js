@@ -22,5 +22,12 @@ export default ( http ) => ({
 	},
 	test () {
 		return 'test'
-	}
+	},
+	pay (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/order/pay',
+			params:query
+		})
+	},
 })

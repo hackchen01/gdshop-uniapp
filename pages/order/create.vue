@@ -44,8 +44,7 @@
 					</view>
 					<view class="right">
 						<view class="price">
-							￥{{ priceInt((item.options[0].price / 100)) }}
-							<text class="decimal">.{{ priceDecimal((item.options[0].price / 100)) }}</text>
+							￥{{ ((item.options[0].price / 100)).toFixed(2) }}
 						</view>
 						<view class="number">x{{ item.buy_num }}</view>
 					</view>
@@ -53,8 +52,7 @@
 				<view class="total">
 					共{{ totalNum(res.goodss) }}件 小计:
 					<text class="total-price">
-						￥{{ priceInt(totalPrice(res.goodss)) }}.
-						<text class="decimal">{{ priceDecimal(totalPrice(res.goodss)) }}</text>
+						￥{{ (totalPrice(res.goodss)) }}
 					</text>
 				</view>
 			</view>
@@ -136,9 +134,9 @@
 		data() {
 			return {
 				queryData: {
-					goods_id:'',
-					goods_num:'',
-					goods_option_id:'',
+					goods_id:0,
+					goods_num:0,
+					goods_option_id:0,
 					cart_ids:[]
 				},
 				addressInfo: {},
@@ -273,7 +271,7 @@
 				that.submitBtnLoading = true
 				setTimeout(function() {
 					that.submitBtnLoading = false
-				}, 20000);
+				}, 6000);
 				let goodsList = []
 				that.orderList.map(order => {
 					order.goodss.map(item => {
@@ -292,7 +290,7 @@
 				}
 				that.$api.order.submit(submitData).then(res => {
 					that.submitBtnLoading = false
-					that.$myRouter.push({name:'order/pay',params:{id:res.order_id}})
+					that.$myRouter.replace({name:'order/pay',params:{id:res.order_id}})
 				}).catch(err => {
 					that.submitBtnLoading = false
 					that.$u.toast(err.message)

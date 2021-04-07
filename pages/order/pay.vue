@@ -1,20 +1,23 @@
 <template>
 	<view class="">
 		<view class="pay-top">
-			<view class="countdown">
-				支付剩余时间：<u-count-down :timestamp="timestamp"
+			<view class="countdown" v-if="countDownSecond > 0">
+				支付剩余时间：<u-count-down :timestamp="countDownSecond"
 				color="#F00" separator-color="#F00" @end="countdownEnd"
 				></u-count-down>
 			</view>
+			<view class="countdown" v-else>
+				订单已超时关闭
+			</view>
 			<view class="price">
 				<text>￥</text>
-				<text class="num">71.50</text>
+				<text class="num">{{payMoney}}</text>
 			</view>
 		</view>
-		<view class="pay-payment-list">
+		<view class="pay-payment-list" v-if="countDownSecond > 0">
 			<view class="pay-payment-item" 
 			v-for="(p,index) in paymentList" :key="index"
-			@click="selectPaymentFn(p.type)">
+			@click="selectPaymentFn(p.code)">
 				<view class="icon payment-icon img_bg" 
 				:style="'background-image: url('+p.img+');'">
 					
@@ -29,12 +32,12 @@
 				</view>
 				<view class="check">
 					<u-icon name="checkmark-circle-fill" color="#F00"
-					v-if="selectPayment == p.type"
+					v-if="selectPayment == p.code"
 					></u-icon>
 				</view>
 			</view>
 		</view>
-		<view class="addSite" @tap="confirmPay">
+		<view class="addSite" @tap="confirmPay" v-if="countDownSecond > 0">
 			<view class="add">
 				确认支付
 			</view>
@@ -46,29 +49,30 @@
 	export default{
 		data() {
 			return {
-				timestamp: 1799,
+				countDownSecond: 1799,
 				selectPayment:'alipay',
+				payMoney:0,
 				paymentList: [
 					{
-						type: 'alipay',
+						code: 'alipay',
 						name: '支付宝',
 						remark: '',
 						img: 'http://woyinshua-order-img.gida.cn/icon/payment/alipay.png',
 					},
 					{
-						type: 'wechatpay',
+						code: 'wechatpay',
 						name: '微信支付',
 						remark: '',
 						img: 'http://woyinshua-order-img.gida.cn/icon/payment/wechatpay.png',
 					},
 					{
-						type: 'unionpay',
+						code: 'unionpay',
 						name: '银联支付',
 						remark: '',
 						img: 'http://woyinshua-order-img.gida.cn/icon/payment/unionpay.png',
 					},
 					{
-						type: 'balance',
+						code: 'balance',
 						name: '余额支付',
 						remark: '账户可用余额 ￥0.00',
 						img: 'http://woyinshua-order-img.gida.cn/icon/payment/balance.png',
@@ -78,6 +82,23 @@
 		},
 		onLoad() {
 			console.log(this.$Route.query)
+			this.getPayData(this.$Route.query.id)
+		},
+		onBackPress(event){
+			if ('backbutton' != event.from){
+				return false
+			}
+			let that = this
+			uni.showModal({
+				title: '提示',
+				content: '确认取消支付吗？',  
+				success: function(res) {  
+					if (res.confirm) {  
+						that.$myRouter.back()
+					}
+				}
+			})
+			return true
 		},
 		methods:{
 			countdownEnd(){
@@ -87,7 +108,20 @@
 				this.selectPayment = _type
 			},
 			confirmPay(){
+				if (this.countDownSecond < 1){
+					this.$u.toast('订单已经超时关闭')
+					return false
+				}
 				this.$myRouter.replaceAll({name:'index/msg',params:{msg:'支付成功'}})
+			},
+			getPayData(_orderId){
+				const that = this
+				that.$api.order.pay({id:_orderId}).then(res => {
+					console.log(res)
+					that.payMoney = (res.total_price / 100).toFixed(2)
+					that.countDownSecond = res.count_down_second
+					that.paymentList = res.payment_list
+				})
 			}
 		}
 	}
