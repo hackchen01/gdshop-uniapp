@@ -23,7 +23,7 @@
 					<view class="number">x{{ item.total }}</view>
 				</view>
 			</view>
-			<view class="tips-table" v-for="(tips,tindex) in res.tips_list" :key="rindex + '_' + tindex">
+			<view class="tips-table" v-for="(tips,tindex) in res.tips_list" :key="tindex">
 				<view class="title">{{tips.title}}</view>
 				<view class="remark">{{tips.remark}}</view>
 				<view class="status">{{tips.status}}</view>
