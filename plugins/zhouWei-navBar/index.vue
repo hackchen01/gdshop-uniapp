@@ -327,7 +327,7 @@
 						frontColor: frontColor,
 						backgroundColor: "#FFFFFF"
 					});
-				}, 10);
+				}, 150);
 			}
 		}
 	};
