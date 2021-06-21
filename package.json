@@ -22,5 +22,43 @@
   },
   "devDependencies": {
     "@types/uni-app": "^1.4.3"
-  }
+  },
+  
+  "uni-app": {
+        "scripts": {  
+          "h5-dev": {  
+            "title": "H5-开发",  
+            "env": {  
+              "NODE_ENV": "development",  
+              "UNI_PLATFORM": "h5",  
+              "VUE_APP_BASE_API": "http://127.0.0.1:8181"  
+            },  
+            "define": {  
+              "H5": true  
+            }  
+          },  
+          "h5-sit": {  
+            "title": "H5-测试",  
+            "env": {  
+              "NODE_ENV": "production",  
+              "UNI_PLATFORM": "h5",  
+              "VUE_APP_BASE_API": "http://47.242.64.5:8099"  
+            },  
+            "define": {  
+              "H5": true  
+            }  
+          },  
+          "h5-prod": {  
+            "title": "H5-生产",  
+            "env": {  
+              "NODE_ENV": "production",  
+              "UNI_PLATFORM": "h5",  
+              "VUE_APP_BASE_API": "http://47.242.64.5:8099"  
+            },  
+            "define": {  
+              "H5": true  
+            }  
+          }  
+        }  
+      }
 }

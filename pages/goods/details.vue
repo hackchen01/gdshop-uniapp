@@ -1,7 +1,7 @@
 <template>
 	<view class="goods-details">
 		<view class="page-bg-gray"></view>
-		<nav-bar type="transparentFixed" :scrollTop="scrollTop" transparentFixedFontColor="#FFF">
+		<nav-bar ref="navBar" type="transparentFixed" :scrollTop="scrollTop" transparentFixedFontColor="#000">
 			<view slot="left">
 				<!-- 左边 正常状态 -->
 				<view class="header_left_info nav-bar-left"
@@ -684,7 +684,15 @@
 			}
 		},
 		onPageScroll(e) {
-			this.scrollTop = e.scrollTop;
+			// this.scrollTop = e.scrollTop;
+			/*
+			if (e.scrollTop > 300){
+				this.scrollTop = 300
+			} else {
+				this.scrollTop = 0
+			}
+			*/
+		   this.$refs.navBar.pageScroll(e);
 		},
 	}
 </script>
