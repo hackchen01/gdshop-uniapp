@@ -30,4 +30,11 @@ export default ( http ) => ({
 			params:query
 		})
 	},
+	submitPay (data = {}) {
+		return http.request({
+			method: 'POST',
+			url: '/order/submit_pay',
+			data
+		})
+	}
 })

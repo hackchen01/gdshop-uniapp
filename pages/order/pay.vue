@@ -51,6 +51,7 @@
 			return {
 				countDownSecond: 1799,
 				selectPayment:'alipay',
+				orderId:0,
 				payMoney:0,
 				paymentList: [
 					{
@@ -112,10 +113,15 @@
 					this.$u.toast('订单已经超时关闭')
 					return false
 				}
-				this.$myRouter.replaceAll({name:'index/msg',params:{msg:'支付成功'}})
+				this.$api.order.submitPay({
+					order_id:this.orderId,
+					payment:this.selectPayment
+				})
+				console.log(this.selectPayment)
 			},
 			getPayData(_orderId){
 				const that = this
+				this.orderId = _orderId
 				that.$api.order.pay({id:_orderId}).then(res => {
 					console.log(res)
 					that.payMoney = (res.total_price / 100).toFixed(2)

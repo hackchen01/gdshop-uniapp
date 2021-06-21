@@ -155,7 +155,9 @@ export default {
 		},
 		// 根据订单状态跳转下一个功能
 		gotoNext(_orderId,_status){
-			
+			if(1 == _status){
+				this.$myRouter.push({name:'order/pay',params:{id:_orderId}})
+			}
 		}
 	}
 };
