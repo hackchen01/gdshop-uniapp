@@ -3,7 +3,7 @@
 		<view class="goods-item" v-for="(item, index) in goodsList" :key="index"
 		@click="gotoGoodsDetails(item.id)">
 			<view class="goods-item-img">
-				<u-image :src="item.cover_photo" class="img"
+				<u-image :src="item.cover" class="img"
 				mode="widthFix">
 					<u-loading slot="loading"></u-loading>
 					<view slot="error" class="error-box">
