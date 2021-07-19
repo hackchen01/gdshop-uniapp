@@ -36,7 +36,7 @@
 					</view>
 				</view>
 				<view class="item" v-for="(item, index) in res.goodss" :key="index">
-					<view class="left"><image :src="item.cover_photo" mode="aspectFill"></image></view>
+					<view class="left"><image :src="item.cover" mode="aspectFill"></image></view>
 					<view class="content">
 						<view class="title u-line-2">{{ item.goods_name }}</view>
 						<view class="type">{{ item.options[0].sku_name }}</view>

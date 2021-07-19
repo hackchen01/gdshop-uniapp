@@ -9,8 +9,8 @@
 				</view>
 				<view class="right">{{ getStatusText(res.status) }}</view>
 			</view>
-			<view class="item" v-for="(item, index) in res.subs" :key="index">
-				<view class="left"><image :src="item.cover_photo" mode="aspectFill"></image></view>
+			<view class="item" v-for="(item, index) in res.subs" :key="rindex + '_' + index">
+				<view class="left"><image :src="photo_base_url + item.cover_photo" mode="aspectFill"></image></view>
 				<view class="content">
 					<view class="title u-line-2">{{ item.goods_name }}</view>
 					<view class="type">{{ item.goods_option_title }}</view>
@@ -23,7 +23,7 @@
 					<view class="number">x{{ item.total }}</view>
 				</view>
 			</view>
-			<view class="tips-table" v-for="(tips,tindex) in res.tips_list" :key="tindex">
+			<view class="tips-table" v-for="(tips,tindex) in res.tips_list" :key="rindex + '_t_' + tindex">
 				<view class="title">{{tips.title}}</view>
 				<view class="remark">{{tips.remark}}</view>
 				<view class="status">{{tips.status}}</view>
@@ -62,6 +62,7 @@ export default {
 			orderList:[],
 			orderPage:0,
 			orderEnd:false,
+			photo_base_url:'',
 			loadStatus: 'loading',
 			next_status_text: [],
 			status_text: [],
@@ -76,7 +77,7 @@ export default {
 			};
 		},
 		// 价格整数
-		priceInt() {
+		priceInt2() {
 			return val => {
 				if (val !== parseInt(val)) return val.split('.')[0];
 				else return val;
@@ -84,6 +85,11 @@ export default {
 		}
 	},
 	methods: {
+		// 价格整数
+		priceInt(val){
+			if (val !== parseInt(val)) return val.split('.')[0];
+			else return val;
+		},
 		// 页面数据
 		getOrderList(idx) {
 			const that = this
@@ -98,6 +104,7 @@ export default {
 				that.orderList = that.orderList.concat(res.list)
 				that.next_status_text = res.next_status_text
 				that.status_text = res.status_text
+				that.photo_base_url = res.photo_base_url
 				if (res.page_info.has_more){
 					that.loadStatus = 'loadmore'
 				} else{

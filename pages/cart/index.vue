@@ -40,7 +40,7 @@
 						</view>
 						<view class="money">
 							<view class="text">
-								￥ {{item['show_price']}}
+								￥ {{cartFormatPrice(item['price'])}}
 							</view>
 							<view class="btn">
 								<u-number-box :value="item.total" :index="index"

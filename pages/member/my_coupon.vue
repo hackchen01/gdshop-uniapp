@@ -60,6 +60,11 @@
 				</view>
 			</view>
 		</view>
+		<view class="addSite" @tap="toMoreCoupon">
+			<view class="add">
+				领取更多优惠券
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -85,6 +90,11 @@ export default {
 		tabsChange(_index){
 			console.log(_index)
 			this.tabsCurrent = _index
+		},
+		toMoreCoupon(){
+			this.$myRouter.push({
+				name: 'coupon/index'
+			})
 		}
 	}
 }
@@ -182,6 +192,26 @@ export default {
 				background-color: $u-type-info-disabled;
 				text-align: center;
 			}
+		}
+	}
+}
+.addSite {
+	display: flex;
+	justify-content: space-around;
+	width: 600rpx;
+	line-height: 100rpx;
+	position: absolute;
+	bottom: 30rpx;
+	left: 80rpx;
+	background-color: red;
+	border-radius: 60rpx;
+	font-size: 30rpx;
+	.add{
+		display: flex;
+		align-items: center;
+		color: #ffffff;
+		.icon{
+			margin-right: 10rpx;
 		}
 	}
 }

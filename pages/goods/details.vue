@@ -306,7 +306,7 @@
 			skuIdName="id"
 			skuListName="options"
 			specListName="specs"
-			goodsThumbName="cover_photo"
+			goodsThumbName="cover"
 		></vk-u-goods-sku-popup>
 
 		<!-- 底部栏 -->
