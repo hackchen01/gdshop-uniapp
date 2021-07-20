@@ -5,7 +5,7 @@
 		></u-tabs-swiper>
 		<view class="page-bg-gray"></view>
 		<view class="u-wrap">
-			<view class="jingdong" v-for="(item,index) in couponList">
+			<view class="jingdong" :class="item.my_status === 3 ? 'disable':''" v-for="(item,index) in couponList">
 				<view class="left">
 					<view class="sum" v-if="item.coupon_type === 1 || item.coupon_type === 3">
 						￥<text class="num">{{ item.discount_money / 100 }}</text>
@@ -33,7 +33,8 @@
 									{{$u.timeFormat(item.receive_time_start, 'yyyy.mm.dd')}}-{{$u.timeFormat(item.receive_time_end, 'yyyy.mm.dd')}}
 								</template>
 							</view>
-							<view class="immediate-use">去使用</view>
+							<view class="immediate-use" v-if="item.my_status === 1">去使用</view>
+							<view class="immediate-use" v-if="item.my_status === 0" @click="receive(item)">领取</view>
 						</view>
 					</view>
 					<view class="tips">
@@ -99,6 +100,13 @@ export default {
 		},
 		openDetails(){
 			this.detailsShow = true;
+		},
+		receive(_row){
+			const that = this
+			that.$api.coupon.receive({id:_row.id}).then(res => {
+				that.$u.toast('领取成功')
+				_row.my_status = 1
+			})
 		}
 	}
 }
@@ -197,6 +205,20 @@ export default {
 				border-radius: 50%;
 				background-color: $u-type-info-disabled;
 				text-align: center;
+			}
+		}
+	}
+	&.disable{
+		.left{
+			background-color: #CCC;
+		}
+		.right{
+			.top{
+				.title{
+					.tag{
+						background-color: #CCC;
+					}
+				}
 			}
 		}
 	}

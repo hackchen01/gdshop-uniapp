@@ -6,4 +6,11 @@ export default ( http ) => ({
 			params: query
 		})
 	},
+	receive (query = {}) {
+		return http.request({
+			method: 'GET',
+			url: '/coupon/receive',
+			params: query
+		})
+	},
 })
