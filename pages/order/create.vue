@@ -68,9 +68,9 @@
 							>(已选{{selectCoupons.length}}张)</text>
 						</view>
 						<view slot="right-icon" class="">
-							<view class="coupon-not" v-if="res.coupon_list.length < 1">无可用</view>
+							<view class="coupon-not" v-if="couponList.length < 1">无可用</view>
 							<view class="coupon-select" 
-							v-if="res.coupon_list.length > 0 && selectCoupons.length < 1">去选择</view>
+							v-if="couponList.length > 0 && selectCoupons.length < 1">去选择</view>
 							<view class="coupon-discount" 
 							v-if="selectCoupons.length > 0">-￥10.00</view>
 						</view>
@@ -411,6 +411,7 @@
 		height: 120rpx;
 	}
 	.order-create-tabbar{
+		z-index: 100;
 		border-top: 1px solid #CCC;
 		background-color: #FFF;
 		display: flex;
