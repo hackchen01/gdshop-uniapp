@@ -61,18 +61,18 @@
 							￥{{freight}}
 						</view>
 					</u-cell-item>
-					<u-cell-item @click="gotoUseCoupon">
+					<u-cell-item @click="gotoUseCoupon(res.select_coupon_id)">
 						<view slot="title" class="">
 							优惠券<text class="coupon-discount"
 							v-if="selectCoupons.length > 0"
 							>(已选{{selectCoupons.length}}张)</text>
 						</view>
 						<view slot="right-icon" class="">
-							<view class="coupon-not" v-if="couponList.length < 1">无可用</view>
+							<view class="coupon-not" v-if="res.coupon_num < 1">无可用</view>
 							<view class="coupon-select" 
-							v-if="couponList.length > 0 && selectCoupons.length < 1">去选择</view>
+							v-if="res.coupon_num > 0 && res.select_coupon_id < 1">去选择</view>
 							<view class="coupon-discount" 
-							v-if="selectCoupons.length > 0">-￥10.00</view>
+							v-if="res.select_coupon_id > 0">-￥{{(res.discount_money/100).toFixed(2)}}</view>
 						</view>
 					</u-cell-item>
 					<u-cell-item title="合计" :arrow="false" hover-class="cell-hover-class">
@@ -201,7 +201,10 @@
 			},
 			getCreateDataByGoodsId(){
 				const that = this
-				this.$api.order.create(this.queryData).then(res => {
+				this.$api.order.create({
+					goods_list: this.queryData,
+					cart_ids: this.queryData.cart_ids
+				}).then(res => {
 					console.log(res)
 					that.orderList = res.order_info.order_list
 					that.freight = res.order_info.freight
@@ -304,8 +307,9 @@
 					that.$u.toast(err.message)
 				})
 			},
-			gotoUseCoupon(){
+			gotoUseCoupon(_select_coupon_id){
 				let submitData = this.getSubmitData();
+				submitData.select_coupon_id = _select_coupon_id;
 				this.$myRouter.push({name:'order/use_coupon',params:submitData})
 			},
 			gotoUseInvoice(){

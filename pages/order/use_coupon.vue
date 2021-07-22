@@ -118,6 +118,7 @@ export default {
 			}
 		},
 		getCouponList(_queryData){
+			this.couponCheckeds[_queryData.select_coupon_id] = 1;
 			this.$api.order.useCoupon(_queryData).then(res => {
 				console.log(res)
 				this.couponList = res;
