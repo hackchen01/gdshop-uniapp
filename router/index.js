@@ -7,7 +7,7 @@ Vue.use(Router)
 
 //初始化
 const router = new Router({
-    encodeURI:false,
+    encodeURI:true,
     h5:{
         paramsToQuery:true,
     },

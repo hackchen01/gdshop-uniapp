@@ -261,17 +261,13 @@
 				});
 				return num;
 			},
-			submitOrder(){
+			getSubmitData(){
 				let that = this
 				// 检测是否选择地址
 				if(!(that.addressInfo && that.addressInfo.id)){
 					that.$u.toast('请选择收件地址')
 					return
 				}
-				that.submitBtnLoading = true
-				setTimeout(function() {
-					that.submitBtnLoading = false
-				}, 6000);
 				let goodsList = []
 				that.orderList.map(order => {
 					order.goodss.map(item => {
@@ -288,6 +284,16 @@
 					goods_list:goodsList,
 					cart_ids:that.queryData.cart_ids
 				}
+				
+				return submitData;
+			},
+			submitOrder(){
+				let that = this
+				that.submitBtnLoading = true
+				setTimeout(function() {
+					that.submitBtnLoading = false
+				}, 6000);
+				let submitData = this.getSubmitData();
 				that.$api.order.submit(submitData).then(res => {
 					that.submitBtnLoading = false
 					that.$myRouter.replace({name:'order/pay',params:{id:res.order_id}})
@@ -297,7 +303,8 @@
 				})
 			},
 			gotoUseCoupon(){
-				this.$myRouter.push({name:'order/use_coupon',params:{good_ids:[1,2]}})
+				let submitData = this.getSubmitData();
+				this.$myRouter.push({name:'order/use_coupon',params:submitData})
 			},
 			gotoUseInvoice(){
 				this.$myRouter.push({name:'order/use_invoice',params:{good_ids:[1,2]}})

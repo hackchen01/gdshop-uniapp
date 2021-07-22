@@ -36,5 +36,12 @@ export default ( http ) => ({
 			url: '/order/submit_pay',
 			data
 		})
+	},
+	useCoupon (data = {}) {
+		return http.request({
+			method: 'POST',
+			url: '/order/use_coupon',
+			data
+		})
 	}
 })

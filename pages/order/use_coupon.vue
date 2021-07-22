@@ -5,65 +5,65 @@
 		></u-tabs-swiper>
 		<view class="page-bg-gray"></view>
 		<view class="u-wrap">
-			<view class="jingdong">
-				<view class="left">
-					<view class="sum">
-						￥
-						<text class="num">100</text>
+			<view class="jingdong" v-if="item.use_type == tabStatus" v-for="(item,index) in couponList">
+				<view class="left" @click="checkCoupon(item.id)">
+					<view class="sum" v-if="item.coupon_type === 1 || item.coupon_type === 3">
+						￥<text class="num">{{ item.discount_money / 100 }}</text>
 					</view>
-					<view class="type">满149元可用</view>
+					<view class="sum" v-if="item.coupon_type === 2 || item.coupon_type === 4">
+						<text class="num">{{ item.discount_ratio / 1000 }}</text> 折
+					</view>
+					<view class="type" v-if="item.is_threshold === 0">无门槛</view>
+					<template v-else>
+					<view class="type" v-if="item.coupon_type === 1 || item.coupon_type === 2">满{{ item.threshold_money / 100 }}元可用</view>
+					<view class="type" v-if="item.coupon_type === 3 || item.coupon_type === 4">满{{ item.threshold_num }}件可用</view>
+					</template>
 				</view>
 				<view class="right">
-					<view class="top">
+					<view class="top" @click="checkCoupon(item.id)">
 						<view class="title">
-							<text class="tag">限品类东券</text>
-							<text>仅可购买个人护理部分商品</text>
+							<text class="tag" v-if="item.use_goods_type === 0">全品类</text>
+							<text class="tag" v-if="item.use_goods_type === 1 || item.use_goods_type === 2">限品类</text>
+							<text class="tag" v-if="item.use_goods_type === 3 || item.use_goods_type === 4">限商品</text>
+							<text>{{ item.title }}</text>
 						</view>
 						<view class="bottom">
-							<view class="date u-line-1">2020.01.01-2020.01.31</view>
+							<view class="date u-line-1">
+								<template v-if="item.receive_time_type === 1">
+									{{$u.timeFormat(item.receive_time_start, 'yyyy.mm.dd')}}-{{$u.timeFormat(item.receive_time_end, 'yyyy.mm.dd')}}
+								</template>
+							</view>
 						</view>
 					</view>
 					<view class="tips">
-						<view class="explain">
-							<u-icon name="zhuanfa" class="transpond" :size="24"></u-icon>
-							<text>可赠送</text>
+						<view class="explain" @click="openDetails">
+							<u-icon name="info-circle" class="transpond" :size="24"></u-icon>
+							<text>详情</text>
 						</view>
 					</view>
 				</view>
-				<view class="check">
-					<u-icon name="checkmark-circle-fill" size="50" color="#e93323"></u-icon>
-				</view>
-			</view>
-			<view class="jingdong">
-				<view class="left">
-					<view class="sum">
-						￥
-						<text class="num">100</text>
-					</view>
-					<view class="type">满149元可用</view>
-				</view>
-				<view class="right">
-					<view class="top">
-						<view class="title">
-							<text class="tag">限品类东券</text>
-							<text>仅可购买个人护理部分商品</text>
-						</view>
-						<view class="bottom">
-							<view class="date u-line-1">2020.01.01-2020.01.31</view>
-						</view>
-					</view>
-					<view class="tips">
-						<view class="explain">
-							<u-icon name="zhuanfa" class="transpond" :size="24"></u-icon>
-							<text>可赠送</text>
-						</view>
-					</view>
-				</view>
-				<view class="check">
-					<!-- <u-icon name="checkmark-circle-fill" size="50" color="#e93323"></u-icon> -->
+				<view class="check" v-if="item.use_type == 1" @click="checkCoupon(item.id)">
+					<template v-if="getIsCheck(item.id)">
+						<u-icon name="checkmark-circle-fill" size="50" color="#e93323"></u-icon>
+					</template>
+					<template v-if="!getIsCheck(item.id)">
+						<u-icon name="checkmark-circle-fill" size="50" color="#CCC"></u-icon>
+					</template>
 				</view>
 			</view>
 		</view>
+		
+		<u-popup mode="bottom" safe-area-inset-bottom v-model="detailsShow">
+			<view class="detailsContent">
+				<scroll-view scroll-y="true" style="height: 600rpx;">
+					<view>
+						<view v-for="index in 20" :key="index">
+							第{{index}}个Item
+						</view>
+					</view>
+				</scroll-view>
+			</view>
+		</u-popup>
 	</view>
 </template>
 
@@ -79,13 +79,51 @@ export default {
 					name:'不可使用'
 				},
 			],
-			tabsCurrent:0
+			couponCheckeds: {},
+			detailsShow: false,
+			tabsCurrent:0,
+			tabStatus: 1,
+			couponList: []
+		}
+	},
+	onLoad() {
+		console.log(this.$Route.query)
+		if (this.$Route.query){
+			this.getCouponList(this.$Route.query)
 		}
 	},
 	methods:{
 		tabsChange(_index){
 			console.log(_index)
 			this.tabsCurrent = _index
+			if (_index === 0){
+				this.tabStatus = 1;
+			} else {
+				this.tabStatus = 0;
+			}
+		},
+		openDetails(){
+			this.detailsShow = true;
+		},
+		getIsCheck(_id){
+			return this.couponCheckeds[_id] ? true : false;
+		},
+		checkCoupon(_id){
+			if (this.couponCheckeds[_id]){
+				this.$set(this.couponCheckeds,_id,0)
+				// this.couponCheckeds[_id] = 0;
+			} else {
+				// this.couponCheckeds[_id] = 1;
+				this.$set(this.couponCheckeds,_id,1)
+			}
+		},
+		getCouponList(_queryData){
+			this.$api.order.useCoupon(_queryData).then(res => {
+				console.log(res)
+				this.couponList = res;
+			}).catch(err => {
+				console.log(err)
+			})
 		}
 	}
 }
@@ -93,7 +131,7 @@ export default {
 
 <style lang="scss" scoped>
 .u-wrap {
-	padding:0 24rpx;
+	padding:0 24rpx 60rpx 24rpx;
 }
 
 .jingdong {
@@ -103,7 +141,7 @@ export default {
 	background-color: #ffffff;
 	display: flex;
 	.left {
-		padding: 0 30rpx;
+		width: 400rpx;
 		background-color: rgb(95, 148, 224); //rgb(94, 152, 225);
 		text-align: center;
 		font-size: 28rpx;
@@ -113,7 +151,7 @@ export default {
 			font-weight: bold;
 			font-size: 32rpx;
 			.num {
-				font-size: 80rpx;
+				font-size: 60rpx;
 			}
 		}
 		.type {
@@ -124,10 +162,11 @@ export default {
 	.right {
 		padding: 20rpx 20rpx 0;
 		font-size: 28rpx;
+		width: 100%;
 		.top {
 			border-bottom: 2rpx dashed $u-border-color;
 			.title {
-				margin-right: 60rpx;
+				height: 100rpx;
 				line-height: 40rpx;
 				.tag {
 					padding: 4rpx 20rpx;
@@ -148,6 +187,7 @@ export default {
 				.date {
 					font-size: 20rpx;
 					flex: 1;
+					margin-right: 20rpx;
 				}
 				.immediate-use {
 					height: auto;
@@ -185,11 +225,34 @@ export default {
 			}
 		}
 	}
+	&.disable{
+		.left{
+			background-color: #CCC;
+		}
+		.right{
+			.top{
+				.title{
+					.tag{
+						background-color: #CCC;
+					}
+				}
+			}
+		}
+	}
 	.check{
 		width: 50rpx;
 		display: flex;
 		justify-content: center;
 		justify-items: center;
+		.check-icon{
+			color: #CCC;
+		}
+		.on{
+			color: #e93323;
+		}
 	}
+}
+.detailsContent{
+	padding: 30rpx;
 }
 </style>
