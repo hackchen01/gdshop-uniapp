@@ -7,11 +7,13 @@ function log(message){
 // 初始化
 const http = new Request()
 // 设置公共参数
-http.config.baseURL = 'http://127.0.0.1:8181'
-
+// http.config.baseURL = 'http://47.242.64.5:8099'
+/* 
 if (process.env.NODE_ENV === 'production'){
-	http.config.baseURL = 'http://103.242.135.149:8099'
-}
+	http.config.baseURL = 'http://47.242.64.5:8099'
+} */
+
+http.config.baseURL = process.env.VUE_APP_BASE_API
 
 // 请求前拦截
 http.interceptors.request.use((config) => { // 可使用async await 做异步操作
