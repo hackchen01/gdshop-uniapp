@@ -55,35 +55,37 @@
 						￥{{ (totalPrice(res.goodss)) }}
 					</text>
 				</view>
+				<u-cell-group style="margin-top: 30rpx;">
+					<u-cell-item title="运费" :arrow="false" hover-class="cell-hover-class">
+						<view slot="right-icon" class="">
+							￥{{freight}}
+						</view>
+					</u-cell-item>
+					<u-cell-item @click="gotoUseCoupon">
+						<view slot="title" class="">
+							优惠券<text class="coupon-discount"
+							v-if="selectCoupons.length > 0"
+							>(已选{{selectCoupons.length}}张)</text>
+						</view>
+						<view slot="right-icon" class="">
+							<view class="coupon-not" v-if="res.coupon_list.length < 1">无可用</view>
+							<view class="coupon-select" 
+							v-if="res.coupon_list.length > 0 && selectCoupons.length < 1">去选择</view>
+							<view class="coupon-discount" 
+							v-if="selectCoupons.length > 0">-￥10.00</view>
+						</view>
+					</u-cell-item>
+					<u-cell-item title="合计" :arrow="false" hover-class="cell-hover-class">
+						<view slot="right-icon" class="">
+							￥{{goodsTotalPrice(100)}}
+						</view>
+					</u-cell-item>
+				</u-cell-group>
 			</view>
 		</view>
 		
 		<view class="other-box">
 			<u-cell-group class="group">
-				<u-cell-item title="商品总额" :arrow="false" hover-class="cell-hover-class">
-					<view slot="right-icon" class="">
-						￥{{goodsTotalPrice(100)}}
-					</view>
-				</u-cell-item>
-				<u-cell-item title="运费" :arrow="false" hover-class="cell-hover-class">
-					<view slot="right-icon" class="">
-						￥{{freight}}
-					</view>
-				</u-cell-item>
-				<u-cell-item @click="gotoUseCoupon">
-					<view slot="title" class="">
-						优惠券<text class="coupon-discount"
-						v-if="selectCoupons.length > 0"
-						>(已选{{selectCoupons.length}}张)</text>
-					</view>
-					<view slot="right-icon" class="">
-						<view class="coupon-not" v-if="couponList.length < 1">无可用</view>
-						<view class="coupon-select" 
-						v-if="couponList.length > 0 && selectCoupons.length < 1">去选择</view>
-						<view class="coupon-discount" 
-						v-if="selectCoupons.length > 0">-￥10.00</view>
-					</view>
-				</u-cell-item>
 				<u-cell-item title="发票" @click="gotoUseInvoice">
 					<view slot="right-icon" class="">
 						不开发票
