@@ -11,7 +11,7 @@
 						:size="120"
 						></u-avatar>
 					</view>
-					<view class="info">
+					<view class="info" :key="test">
 						<view class="name" v-if="userInfo.uid">
 							<text @click="goPersonal">{{userInfo.nickname}}</text>
 							<view class="vip" v-if="userInfo.vip">
@@ -25,9 +25,9 @@
 					</view>
 				</view>
 			</view>
-			<view class="shezhi-icon">
+			<!-- <view class="shezhi-icon">
 				<u-icon name="setting" @click="goEdit" size="56"></u-icon>
-			</view>
+			</view> -->
 		</view>
 		<view class="main">
 			<u-grid :col="3" class="num-wrapper" @click="numGridClick" hover-class="none">
@@ -105,7 +105,18 @@
 				</view>
 			</view>
 		</view>
-		<view style="height: 50rpx;"></view>
+		<view style="height: 50rpx;">
+			<view v-if="isLogin" class="addSite" @click="logout">
+				<view class="add">
+					退出登录
+				</view>
+			</view>
+			<view v-else class="addSite" @click="goLogin">
+				<view class="add">
+					登录
+				</view>
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -128,7 +139,36 @@
 				orderMenu: []
 			}
 		},
+		onShow() {
+			this.getData()
+		},
 		methods: {
+			getData(){
+				let data = uni.getStorageSync("authorize")
+				if(data){
+					let authObj = JSON.parse(data)
+					this.isLogin = true
+					this.userInfo.nickname = authObj.username
+				}
+				
+			},
+			goLogin(){
+				this.$myRouter.push({name:'index/login'})
+			},
+			logout(){
+				this.$api.user.logout()
+				.then(res=>{
+					uni.removeStorageSync("authorize")
+					this.isLogin = false
+					this.userInfo.nickname = '昵称'
+					this.$myRouter.pushTab({name:'index/index'})
+					// this.$u.toast("退出登录成功,正在返回首页");
+				})
+				.catch(err=>{
+					console.log(err)
+				})
+				// this.$myRouter.push({name:'index/login'})
+			},
 			getWechatuserinfo() {
 
 			},
@@ -473,5 +513,25 @@
 		top: 20px;
 		color: #FFF;
 		z-index: 99;
+	}
+	.addSite {
+		display: flex;
+		justify-content: space-around;
+		width: 600rpx;
+		line-height: 100rpx;
+		position: absolute;
+		bottom: 30rpx;
+		left: 80rpx;
+		background-color: red;
+		border-radius: 60rpx;
+		font-size: 30rpx;
+		.add{
+			display: flex;
+			align-items: center;
+			color: #ffffff;
+			.icon{
+				margin-right: 10rpx;
+			}
+		}
 	}
 </style>

@@ -6,7 +6,7 @@ export default ( http ) => ({
 			params: query
 		})
 	},
-	test () {
-		return 'test'
+	test1 () {
+		return 'testqweqweqweqwe'
 	}
 })

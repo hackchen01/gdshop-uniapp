@@ -1,7 +1,8 @@
 import * as article from './modules/article'
-
+import * as WXBizDataCrypt from './modules/WXBizDataCrypt'
 const utils = {
-  article
+  article,
+  WXBizDataCrypt
 }
 
 export default utils

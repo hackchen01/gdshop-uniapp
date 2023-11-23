@@ -8,10 +8,10 @@
 			"aliasPath":"/",
 			"name":"index/index",
 			"meta":{
-				"title": "gdshop商城"
+				"title": "房车营地首页"
 			},
 			"style": {
-				"navigationBarTitleText": "gdshop商城"
+				"navigationBarTitleText": "房车营地首页"
 			}
 		},
 		{
