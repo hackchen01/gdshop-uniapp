@@ -2,9 +2,9 @@
     <view class="container">
         <view class="wrapper">
             <view class="form">
-				<u-form :model="form" ref="uForm" :error-type="['border-bottom','toast']">
-					<u-form-item label="账号" prop="mobile">
-						<u-input v-model="form.mobile" placeholder="请输入账号" />
+				<u-form :model="form" ref="uForm" :error-type="['message']">
+					<u-form-item label="账号" prop="emailOrName">
+						<u-input v-model="form.emailOrName" placeholder="请输入邮箱或者用户名" />
 					</u-form-item>
 					<u-form-item label="密码" prop="password">
 						<u-input type="password" v-model="form.password" placeholder="请输入密码" />
@@ -25,30 +25,39 @@
 				</view>
             </view>
         </view>
-		<view class="quick-login">
+		<!-- <view class="quick-login">
 			<view class="title">
 				<text>————— 快捷登陆 —————</text>
 			</view>
 			<view class="icons">
 				<u-icon class="ql-icon" name="weixin-circle-fill" color="rgb(4,174,15)" size="86"></u-icon>
+				<button open-type="chooseAvatar" @chooseavatar="chooseAvatar">123</button>
+				<button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber" plain="true">手机号码</button>
+				
 				<u-icon class="ql-icon" name="qq-circle-fill" color="rgb(74,154,253)" size="86"></u-icon>
 			</view>
-		</view>
+		</view> -->
     </view>
 </template>
 
 <script>
+import { Store } from 'vuex';
+import utils from '@/utils/index.js';
+	
     export default {
 		computed:{
 			isDisable(){
-				return this.form.mobile.length < 1 || 
-				this.form.password.length < 1 || this.isLoading;
+				return this.form.emailOrName.length < 6 || 
+				!this.$u.test.rangeLength(this.form.password,[6,16]) || 
+				this.isLoading;
 			}
 		},
+		
         data() {
             return {
 				rules:{
-					mobile:[{
+					emailOrName:[
+						{
 						required: true, 
 						message: '请输入账号',
 						trigger: ['change','blur']
@@ -56,11 +65,15 @@
 					{
 						// 自定义验证函数
 						validator: (rule, value, callback) => {
-							// 上面有说，返回true表示校验通过，返回false表示不通过
-							// this.$u.test.mobile()就是返回true或者false的
-							return this.$u.test.mobile(value);
+							// 匹配 username 规则和 email规则
+							if(this.$u.test.email(value)){
+								return true;
+							}else if(RegExp(/^[a-zA-Z][a-zA-Z0-9]{5,11}$/).test(value)){
+								return true;
+							}
+							return false;
 						},
-						message: '手机号码不正确',
+						message: '邮箱或者用户名格式不正确',
 						// 触发器可以同时用blur和change
 						trigger: ['change','blur'],
 					}
@@ -72,10 +85,12 @@
 					},
 				},
 				form:{
-					mobile: '',
-					password: '',
+					emailOrName: '295433295@qq.com',
+					password: '295433295',
 				},
-				isLoading: false
+				isLoading: false,
+				session_key:'',
+				openid:''
             }
         },
 		onReady() {
@@ -96,7 +111,7 @@
 				that.isLoading = true
                 that.$refs.uForm.validate(valid => {
 					if (valid) {
-						console.log('验证通过');
+						that.login()
 					} else {
 						console.log('验证失败');
 					}
@@ -106,9 +121,34 @@
 					}, 3000);
 				});
             },
-            getUserInfo(userId, token) {
-                
-            }
+			// 不整openid了, 后续在加上把
+			login(){
+				// console.log(this.form.emailOrName,this.form.password)
+				this.$api.user.login({
+					username:this.form.emailOrName,
+					password:this.form.password
+				})
+				// 存取一下token expire
+				.then(res=>{
+					uni.setStorageSync("authorize",JSON.stringify(res.data))
+					// uni.setStorageSync("expire",res.data.expire)
+					this.$myRouter.pushTab({name:'index/index'})
+					this.$forceUpdate()
+					// console.log(res)
+				})
+				.catch(err=>{
+					this.$u.toast(err.data.message);
+					console.log(err)
+				})
+				
+			},
+			
+			chooseAvatar(event){
+				console.log(event)
+			},
+			getPhoneNumber(e){
+				console.log(e)
+			},
         },
 
     }

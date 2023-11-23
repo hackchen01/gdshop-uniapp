@@ -6,7 +6,7 @@
 			<u-cell-item title="关于我们" @click="gotoArticle('about_us')"></u-cell-item>
 		</u-cell-group>
 		
-		<view class="addSite" @tap="layout">
+		<view class="addSite" @click="logout">
 			<view class="add">
 				退出登录
 			</view>
@@ -21,8 +21,18 @@
 			gotoArticle(_type){
 				utils.article.gotoArticle(_type)
 			},
-			layout(){
-				this.$myRouter.push({name:'index/login'})
+			logout(){
+				this.$api.user.logout()
+				.then(res=>{
+					setTimeout(()=>{
+						this.$myRouter.pushTab({name:'index/index'})
+					}, 1000);
+					this.$u.toast("退出登录成功,正在返回首页");
+				})
+				.catch(err=>{
+					console.log(err)
+				})
+				// this.$myRouter.push({name:'index/login'})
 			}
 		}
 	}

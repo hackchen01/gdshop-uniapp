@@ -12,7 +12,7 @@
 		<view class="notice-box">
 			<u-notice-bar mode="vertical" :more-icon="true" :list="noticeList"></u-notice-bar>
 		</view>
-		<view class="icon-group-box" v-if="this.iconGroup.dataList.length > 0">
+		<!-- <view class="icon-group-box" v-if="this.iconGroup.dataList.length > 0">
 			<template v-if="iconGroupIsSwiper">
 				<swiper class="swiper" @change="iconGroupChange" :style="'height:'+iconGroup.lineHeight+'px;'">
 					<swiper-item v-for="(g, gi) in iconGroup.dataList" :index="gi" :key="gi">
@@ -44,19 +44,15 @@
 					</u-grid>
 				</view>
 			</template>
-		</view>
+		</view> -->
 		<view class="picturew-box mode-2">
-			<view class="picturew-item">
-				<u-image src="https://img.100cms.com.cn/images/5/2020/05/IX5nHqhr5zuQGtqR855555gu3xuMnh.png" class="img" 
+			
+			<view class="picturew-item" v-for="(item, index) in picturewbox" :index="item.index" :key="index">
+				<u-image :src="item.src" class="img"
 				mode="widthFix">
 				</u-image>
 			</view>
-			<view class="picturew-item">
-				<u-image src="https://img.100cms.com.cn/images/5/2020/05/HLNB1A2JvnTM11NL9LzjvLvh91vNyv.png" class="img" 
-				mode="widthFix">
-				</u-image>
-			</view>
-			<view class="picturew-item">
+			<!-- <view class="picturew-item">
 				<u-image src="https://img.100cms.com.cn/images/5/2020/05/LGePeSx4EgP3Jtt96PpY5lPPenJP0X.png" class="img" 
 				mode="widthFix">
 				</u-image>
@@ -65,14 +61,14 @@
 				<u-image src="https://img.100cms.com.cn/images/5/2020/05/j093332VIKEnoR3Obk3HrKCBMqwVGK.png" class="img" 
 				mode="widthFix">
 				</u-image>
-			</view>
+			</view> -->
 		</view>
 		<view class="you-like-box">
-			<view class="title">
+			<!-- <view class="title">
 				<u-image src="https://img.100cms.com.cn/images/5/2020/05/wy10yT1C631tSCeev363e3e3dBb4yC.png" class="img"
 				mode="widthFix">
 				</u-image>
-			</view>
+			</view> -->
 			<view class="goods-box">
 				<goods-list :goodsList="productList"></goods-list>
 			</view>
@@ -209,6 +205,20 @@
 						],
 					]
 				},
+				picturewbox:[
+					{
+						src:"https://img.100cms.com.cn/images/5/2020/05/HLNB1A2JvnTM11NL9LzjvLvh91vNyv.png"
+					},
+					{
+						src:"https://img.100cms.com.cn/images/5/2020/05/HLNB1A2JvnTM11NL9LzjvLvh91vNyv.png"
+					},
+					{
+						src:"https://img.100cms.com.cn/images/5/2020/05/HLNB1A2JvnTM11NL9LzjvLvh91vNyv.png"
+					},
+					{
+						src:"https://img.100cms.com.cn/images/5/2020/05/HLNB1A2JvnTM11NL9LzjvLvh91vNyv.png"
+					},
+				],
 				swiperList:[
 					{
 						image: 'https://cdn.uviewui.com/uview/swiper/1.jpg',
@@ -233,7 +243,7 @@
 				productList: [
 					{
 						id: 1,
-						img: 11111111,
+						img: 1,
 						name: '欧莱雅（LOREAL）奇焕光彩粉嫩透亮修颜霜 30ml（欧莱雅彩妆 BB霜 粉BB 遮瑕疵 隔离）',
 						sale: 599,
 						factory: 899,
